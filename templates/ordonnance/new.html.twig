@@ -1,0 +1,15 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Ordonnance{% endblock %}
+
+{% block body %}
+    <h1>Create Ordonnance</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">Save</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_ordonnance_index') }}">back to list</a>
+{% endblock %}

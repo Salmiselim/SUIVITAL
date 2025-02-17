@@ -59,18 +59,18 @@ public function new(Request $request, EntityManagerInterface $entityManager, Doc
     ]);
 }
 
-    #[Route('/{id}', name: 'app_ordonnance_show', methods: ['GET'])]
-    public function show(Ordonnance $ordonnance): Response
+    #[Route('/{id}/{template}', name: 'app_ordonnance_show', methods: ['GET'], defaults: ['template' => 'template1'])]
+    public function show(Ordonnance $ordonnance,string $template): Response
     {
         return $this->render('ordonnance/show.html.twig', [
             'ordonnance' => $ordonnance,
-            'template' => 'template2',
+            'template' => $template, 
 
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_ordonnance_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Ordonnance $ordonnance, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/edit/{template}', name: 'app_ordonnance_edit', methods: ['GET', 'POST'], defaults: ['template' => 'template1'])]
+    public function edit(Request $request, Ordonnance $ordonnance, EntityManagerInterface $entityManager ,string $template): Response
     {
         $form = $this->createForm(OrdonnanceType::class, $ordonnance);
         $form->handleRequest($request);
@@ -84,7 +84,7 @@ public function new(Request $request, EntityManagerInterface $entityManager, Doc
         return $this->render('ordonnance/edit.html.twig', [
             'ordonnance' => $ordonnance,
             'form' => $form,
-            'template' => 'template1',
+             'template' => $template, 
 
         ]);
     }

@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\Patient;
+use App\Repository\OrdonnanceRepository;
 
 #[Route('/user')]
 final class UserController extends AbstractController
@@ -19,6 +21,7 @@ final class UserController extends AbstractController
     {
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
+            'template' => 'template1',
         ]);
     }
 
@@ -77,5 +80,16 @@ final class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/{id}/ordonnances', name: 'app_user_ordonnances', methods: ['GET'])]
+    public function ordonnances(Patient $patient, OrdonnanceRepository $ordonnanceRepository): Response
+    {
+        $ordonnances = $ordonnanceRepository->findBy(['patient' => $patient]);
+
+        return $this->render('user/home.html.twig', [
+            'patient' => $patient,
+            'ordonnances' => $ordonnances,
+            'template' => 'template1',
+        ]);
     }
 }

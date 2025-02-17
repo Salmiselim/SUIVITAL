@@ -2,7 +2,8 @@
 
 {% block title %}Ordonnance{% endblock %}
 
-{% block content %} y    <div class="container mt-4">
+{% block content %}
+    <div class="container mt-4">
         <h1 class="mb-4">Ordonnance Details</h1>
 
         <div class="card p-4 shadow-sm">
@@ -44,11 +45,16 @@
             </table>
         </div>
 
-        <div class="mt-3">
-            <a href="{{ path('app_ordonnance_index') }}" class="btn btn-secondary">Back to list</a>
-            <a href="{{ path('app_ordonnance_edit', {'id': ordonnance.id}) }}" class="btn btn-primary">Edit</a>
-        </div>
-
-        {{ include('ordonnance/_delete_form.html.twig') }}
+        {% if template == 'template1' %}
+            <div class="mt-3">
+                <a href="javascript:history.back()" class="btn btn-secondary">Retouner a la liste</a>
+            </div>
+        {% else %}
+            <div class="mt-3">
+                <a href="{{ path('app_ordonnance_index') }}" class="btn btn-secondary">Back to list</a>
+<a href="{{ path('app_ordonnance_edit', {'id': ordonnance.id, 'template': template}) }}" class="btn btn-primary">Edit</a>
+            </div>
+            {{ include('ordonnance/_delete_form.html.twig') }}
+        {% endif %}
     </div>
 {% endblock %}

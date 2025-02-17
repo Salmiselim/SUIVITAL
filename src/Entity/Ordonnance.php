@@ -7,46 +7,48 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrdonnanceRepository::class)]
+
 class Ordonnance
 {
+
+
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
     private ?\DateTimeInterface $datePrescription = null;
 
-    /**
-     * @var Collection<int, Medicament>
-     */
-    #[ORM\OneToMany(targetEntity: Medicament::class, mappedBy: 'ordonnance')]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(message: 'description should not be empty')]
+    private ?string $description = null;
+
+    #[ORM\ManyToMany(targetEntity: Medicament::class, inversedBy: 'ordonnances')]
+    #[Assert\NotBlank(message: 'medicaments should not be empty')]
     private Collection $medicaments;
 
-    #[ORM\OneToOne(inversedBy: 'ordonnance', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'ordonnances')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Patient $patientId = null;
+    private ?Patient $patient = null;
 
     #[ORM\ManyToOne(inversedBy: 'ordonnances')]
-    private ?Doctor $doctorId = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Doctor $doctor = null;
 
     public function __construct()
     {
         $this->medicaments = new ArrayCollection();
-    }
+        $this->datePrescription = new \DateTime(); 
+        }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getDatePrescription(): ?\DateTimeInterface
@@ -57,6 +59,19 @@ class Ordonnance
     public function setDatePrescription(\DateTimeInterface $datePrescription): static
     {
         $this->datePrescription = $datePrescription;
+       
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -73,7 +88,7 @@ class Ordonnance
     {
         if (!$this->medicaments->contains($medicament)) {
             $this->medicaments->add($medicament);
-            $medicament->setOrdonnance($this);
+            $medicament->addOrdonnance($this);
         }
 
         return $this;
@@ -82,35 +97,32 @@ class Ordonnance
     public function removeMedicament(Medicament $medicament): static
     {
         if ($this->medicaments->removeElement($medicament)) {
-            // set the owning side to null (unless already changed)
-            if ($medicament->getOrdonnance() === $this) {
-                $medicament->setOrdonnance(null);
-            }
+            $medicament->removeOrdonnance($this);
         }
 
         return $this;
     }
 
-    public function getPatientId(): ?Patient
+    public function getPatient(): ?Patient
     {
-        return $this->patientId;
+        return $this->patient;
     }
 
-    public function setPatientId(Patient $patientId): static
+    public function setPatient(?Patient $patient): static
     {
-        $this->patientId = $patientId;
+        $this->patient = $patient;
 
         return $this;
     }
 
-    public function getDoctorId(): ?Doctor
+    public function getDoctor(): ?Doctor
     {
-        return $this->doctorId;
+        return $this->doctor;
     }
 
-    public function setDoctorId(?Doctor $doctorId): static
+    public function setDoctor(?Doctor $doctor): static
     {
-        $this->doctorId = $doctorId;
+        $this->doctor = $doctor;
 
         return $this;
     }

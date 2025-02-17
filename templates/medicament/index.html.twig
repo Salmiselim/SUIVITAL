@@ -2,11 +2,11 @@
 
 {% block title %}Medicament index{% endblock %}
 
-{% block body %}
-    <h1>Medicament index</h1>
-
-    <table class="table">
-        <thead>
+{% block content %} 
+    <h1>liste des medicaments:</h1>
+   <div class="container mt-4">
+    <table class="table table-striped">
+        <thead class="thead-dark">
             <tr>
                 <th>Id</th>
                 <th>Name</th>
@@ -25,17 +25,17 @@
                 <td>{{ medicament.duration }}</td>
                 <td>{{ medicament.frequency }}</td>
                 <td>
-                    <a href="{{ path('app_medicament_show', {'id': medicament.id}) }}">show</a>
-                    <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}">edit</a>
+                    <a href="{{ path('app_medicament_show', {'id': medicament.id}) }}" class="btn btn-info btn-sm">show</a>
+                    <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}" class="btn btn-warning btn-sm">edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_medicament_new') }}">Create new</a>
+    <a href="{{ path('app_medicament_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}

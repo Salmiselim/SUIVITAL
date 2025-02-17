@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/medicament')]
 final class MedicamentController extends AbstractController
@@ -19,6 +19,7 @@ final class MedicamentController extends AbstractController
     {
         return $this->render('medicament/index.html.twig', [
             'medicaments' => $medicamentRepository->findAll(),
+            'template' => 'template2',
         ]);
     }
 
@@ -39,6 +40,8 @@ final class MedicamentController extends AbstractController
         return $this->render('medicament/new.html.twig', [
             'medicament' => $medicament,
             'form' => $form,
+            'template' => 'template2',
+
         ]);
     }
 
@@ -47,6 +50,7 @@ final class MedicamentController extends AbstractController
     {
         return $this->render('medicament/show.html.twig', [
             'medicament' => $medicament,
+            'template' => 'template2',
         ]);
     }
 
@@ -65,13 +69,14 @@ final class MedicamentController extends AbstractController
         return $this->render('medicament/edit.html.twig', [
             'medicament' => $medicament,
             'form' => $form,
+            'template' => 'template2',
         ]);
     }
 
     #[Route('/{id}', name: 'app_medicament_delete', methods: ['POST'])]
     public function delete(Request $request, Medicament $medicament, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$medicament->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$medicament->getId(), $request->request->get('_token'))) {
             $entityManager->remove($medicament);
             $entityManager->flush();
         }

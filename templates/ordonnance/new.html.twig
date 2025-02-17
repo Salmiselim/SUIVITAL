@@ -1,15 +1,37 @@
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Create Ordonnance{% endblock %}
 
-{% block body %}
-    <h1>Create Ordonnance</h1>
+{% block content %}  {# Change from "body" to "content" #}
+    <div class="container">
+        <h1 class="mb-4">Create Ordonnance</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn">Save</button>
-    {{ form_end(form) }}
+        <div class="card p-4 shadow-sm">
+            {{ form_start(form, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+           
+                <div class="form-group">
+                    {{ form_label(form.description, 'Description') }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+ <div class="form-group">
+    {{ form_label(form.medicaments, 'Medications') }}
+    {{ form_widget(form.medicaments, {'attr': {'class': 'form-control scrollable-multiselect'}}) }}
+    {{ form_errors(form.medicaments) }}
+</div>
 
-    <a href="{{ path('app_ordonnance_index') }}">back to list</a>
+                <div class="form-group">
+                    {{ form_label(form.patient, 'Patient') }}
+                    {{ form_widget(form.patient, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.patient) }}
+                </div>
+      
+                <div class="form-group">
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary mt-3'}}) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+
+        <a href="{{ path('app_ordonnance_index') }}" class="btn btn-link mt-3">Back to list</a>
+    </div>
 {% endblock %}

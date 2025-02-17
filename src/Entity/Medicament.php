@@ -4,29 +4,41 @@ namespace App\Entity;
 
 use App\Repository\MedicamentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MedicamentRepository::class)]
 class Medicament
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Name should not be empty')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'dosage should not be empty')]
     private ?string $dosage = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $duration = null;
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank(message: 'duration should not be empty')]
+    private ?int $duration = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'frequency should not be empty')]
     private ?string $frequency = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medicaments')]
-    private ?Ordonnance $ordonnance = null;
+    #[ORM\ManyToMany(targetEntity: Ordonnance::class, mappedBy: 'medicaments')]
+    private Collection $ordonnances;
+
+    public function __construct()
+    {
+        $this->ordonnances = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -64,12 +76,12 @@ class Medicament
         return $this;
     }
 
-    public function getDuration(): ?string
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    public function setDuration(string $duration): static
+    public function setDuration(int $duration): static
     {
         $this->duration = $duration;
 
@@ -88,14 +100,29 @@ class Medicament
         return $this;
     }
 
-    public function getOrdonnance(): ?ordonnance
+    /**
+     * @return Collection<int, Ordonnance>
+     */
+    public function getOrdonnances(): Collection
     {
-        return $this->ordonnance;
+        return $this->ordonnances;
     }
 
-    public function setOrdonnance(?ordonnance $ordonnance): static
+    public function addOrdonnance(Ordonnance $ordonnance): static
     {
-        $this->ordonnance = $ordonnance;
+        if (!$this->ordonnances->contains($ordonnance)) {
+            $this->ordonnances->add($ordonnance);
+            $ordonnance->addMedicament($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrdonnance(Ordonnance $ordonnance): static
+    {
+        if ($this->ordonnances->removeElement($ordonnance)) {
+            $ordonnance->removeMedicament($this);
+        }
 
         return $this;
     }

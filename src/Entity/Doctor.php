@@ -21,7 +21,7 @@ class Doctor extends User
     /**
      * @var Collection<int, Ordonnance>
      */
-    #[ORM\OneToMany(targetEntity: Ordonnance::class, mappedBy: 'doctorId')]
+    #[ORM\OneToMany(mappedBy: 'doctor', targetEntity: Ordonnance::class, cascade: ['persist', 'remove'])]
     private Collection $ordonnances;
 
     /**
@@ -73,7 +73,7 @@ class Doctor extends User
     {
         if (!$this->ordonnances->contains($ordonnance)) {
             $this->ordonnances->add($ordonnance);
-            $ordonnance->setDoctorId($this);
+            $ordonnance->setDoctor($this);
         }
 
         return $this;
@@ -83,8 +83,8 @@ class Doctor extends User
     {
         if ($this->ordonnances->removeElement($ordonnance)) {
             // set the owning side to null (unless already changed)
-            if ($ordonnance->getDoctorId() === $this) {
-                $ordonnance->setDoctorId(null);
+            if ($ordonnance->getDoctor() === $this) {
+                $ordonnance->setDoctor(null);
             }
         }
 

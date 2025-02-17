@@ -2,25 +2,53 @@
 
 {% block title %}Ordonnance{% endblock %}
 
-{% block body %}
-    <h1>Ordonnance</h1>
+{% block content %} y    <div class="container mt-4">
+        <h1 class="mb-4">Ordonnance Details</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ ordonnance.id }}</td>
-            </tr>
-            <tr>
-                <th>DatePrescription</th>
-                <td>{{ ordonnance.datePrescription ? ordonnance.datePrescription|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="card p-4 shadow-sm">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ ordonnance.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Prescription</th>
+                        <td>{{ ordonnance.datePrescription ? ordonnance.datePrescription|date('Y-m-d H:i:s') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ ordonnance.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Patient</th>
+                        <td>{{ ordonnance.patient.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Doctor</th>
+                        <td>{{ ordonnance.doctor.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Medications</th>
+                        <td>
+                            <ul>
+                                {% for medicament in ordonnance.medicaments %}
+                                    <li>{{ medicament.name }} - {{ medicament.dosage }} - {{ medicament.frequency }} - {{ medicament.duration }}</li>
+                                {% else %}
+                                    <li>No medications assigned</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <a href="{{ path('app_ordonnance_index') }}">back to list</a>
+        <div class="mt-3">
+            <a href="{{ path('app_ordonnance_index') }}" class="btn btn-secondary">Back to list</a>
+            <a href="{{ path('app_ordonnance_edit', {'id': ordonnance.id}) }}" class="btn btn-primary">Edit</a>
+        </div>
 
-    <a href="{{ path('app_ordonnance_edit', {'id': ordonnance.id}) }}">edit</a>
-
-    {{ include('ordonnance/_delete_form.html.twig') }}
+        {{ include('ordonnance/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

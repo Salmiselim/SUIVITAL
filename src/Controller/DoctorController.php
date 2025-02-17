@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/doctor')]
 final class DoctorController extends AbstractController
@@ -19,6 +19,7 @@ final class DoctorController extends AbstractController
     {
         return $this->render('doctor/index.html.twig', [
             'doctors' => $doctorRepository->findAll(),
+            'template' => 'template1',
         ]);
     }
 
@@ -71,11 +72,20 @@ final class DoctorController extends AbstractController
     #[Route('/{id}', name: 'app_doctor_delete', methods: ['POST'])]
     public function delete(Request $request, Doctor $doctor, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$doctor->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$doctor->getId(), $request->request->get('_token'))) {
             $entityManager->remove($doctor);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_doctor_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/home/{id}', name: 'app_doctor_home', methods: ['GET'])]
+    public function home(Doctor $doctor): Response
+    {
+        return $this->render('doctor/home.html.twig', [
+            'doctor_name' => $doctor->getName(),
+            'template' => 'template1',
+        ]);
     }
 }

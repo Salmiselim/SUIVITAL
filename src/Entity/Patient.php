@@ -11,16 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
 class Patient extends User
 {
-
-
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
     #[ORM\Column(length: 255)]
     private ?string $insuranceNumber = null;
 
-    #[ORM\OneToOne(mappedBy: 'patientId', cascade: ['persist', 'remove'])]
-    private ?Ordonnance $ordonnance = null;
+    #[ORM\OneToMany(mappedBy: 'patient', targetEntity: Ordonnance::class, cascade: ['persist', 'remove'])]
+    private Collection $ordonnances;
 
     /**
      * @var Collection<int, RendezVous>
@@ -30,9 +28,9 @@ class Patient extends User
 
     public function __construct()
     {
+        $this->ordonnances = new ArrayCollection();
         $this->rendezVouses = new ArrayCollection();
     }
-
 
     public function getDateOfBirth(): ?\DateTimeInterface
     {
@@ -58,19 +56,32 @@ class Patient extends User
         return $this;
     }
 
-    public function getOrdonnance(): ?Ordonnance
+    /**
+     * @return Collection<int, Ordonnance>
+     */
+    public function getOrdonnances(): Collection
     {
-        return $this->ordonnance;
+        return $this->ordonnances;
     }
 
-    public function setOrdonnance(Ordonnance $ordonnance): static
+    public function addOrdonnance(Ordonnance $ordonnance): static
     {
-        // set the owning side of the relation if necessary
-        if ($ordonnance->getPatientId() !== $this) {
-            $ordonnance->setPatientId($this);
+        if (!$this->ordonnances->contains($ordonnance)) {
+            $this->ordonnances->add($ordonnance);
+            $ordonnance->setPatient($this);
         }
 
-        $this->ordonnance = $ordonnance;
+        return $this;
+    }
+
+    public function removeOrdonnance(Ordonnance $ordonnance): static
+    {
+        if ($this->ordonnances->removeElement($ordonnance)) {
+            // set the owning side to null (unless already changed)
+            if ($ordonnance->getPatient() === $this) {
+                $ordonnance->setPatient(null);
+            }
+        }
 
         return $this;
     }

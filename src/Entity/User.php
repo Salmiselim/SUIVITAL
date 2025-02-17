@@ -25,7 +25,6 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    // Remove the 'role' field definition to avoid conflict with the discriminator column
 
     public function getId(): ?int
     {

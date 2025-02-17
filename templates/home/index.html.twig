@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suivital - Suivi de Santé Intelligent{% endblock %}
+
+{% block content %}
+<div class="header bg-gradient-success py-7 py-lg-8">
+    <div class="container">
+        <div class="header-body text-center mb-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <h1 class="text-white">Bienvenue sur Suivital</h1>
+                    <p class="text-white mt-3">
+                        La plateforme de suivi de santé intelligente qui vous aide à surveiller vos prescriptions, rendez-vous médicaux et plus encore !
+                    </p>
+                    <a href="#" class="btn btn-white mt-4">
+                        Commencer <i class="ni ni-bold-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle mb-4">
+                        <i class="ni ni-chart-bar-32"></i>
+                    </div>
+                    <h5 class="h3">📊 Suivi de Santé</h5>
+                    <p>Surveillez vos indicateurs vitaux, antécédents médicaux et prescriptions en toute simplicité.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle mb-4">
+                        <i class="ni ni-calendar-grid-58"></i>
+                    </div>
+                    <h5 class="h3">🩺 Rendez-vous Médicaux</h5>
+                    <p>Planifiez vos consultations et suivez votre historique médical en quelques clics.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle mb-4">
+                        <i class="ni ni-bell-55"></i>
+                    </div>
+                    <h5 class="h3">🔔 Rappels Intelligents</h5>
+                    <p>Recevez des notifications pour vos médicaments et consultations médicales.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container text-center mt-5">
+    <h2 class="mb-4">Prêt à prendre soin de votre santé ?</h2>
+  <a href="{{ path('app_ordonnance_new', {'template': 'template1'}) }}" class="btn btn-success btn-lg">
+    Créer une ordonnance <i class="ni ni-fat-add ml-2"></i>
+</a>
+
+</div>
+
+{% endblock %}

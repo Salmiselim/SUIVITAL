@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Post
 {
     #[ORM\Id]
@@ -28,7 +29,7 @@ class Post
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
     /**
@@ -40,6 +41,7 @@ class Post
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable(); // Définit la date de création automatiquement
     }
 
     public function getId(): ?int
@@ -55,7 +57,6 @@ class Post
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -67,7 +68,6 @@ class Post
     public function setContent(string $content): static
     {
         $this->content = $content;
-
         return $this;
     }
 
@@ -79,7 +79,6 @@ class Post
     public function setAuthor(string $author): static
     {
         $this->author = $author;
-
         return $this;
     }
 
@@ -88,23 +87,15 @@ class Post
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
     {
-        $this->updated_at = $updated_at;
-
-        return $this;
+        $this->updated_at = new \DateTimeImmutable(); // Met à jour la date de modification
     }
 
     /**
@@ -121,7 +112,6 @@ class Post
             $this->comments->add($comment);
             $comment->setPost($this);
         }
-
         return $this;
     }
 
@@ -133,7 +123,6 @@ class Post
                 $comment->setPost(null);
             }
         }
-
         return $this;
     }
 }

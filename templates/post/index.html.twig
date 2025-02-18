@@ -1,43 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Post index{% endblock %}
+{% block title %}Posts{% endblock %}
 
 {% block body %}
-    <h1>Post index</h1>
+    <h1 style="text-align: center;">SUIVITAL Forum</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>Author</th>
-                <th>Created_at</th>
-                <th>Updated_at</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div style="max-width: 800px; margin: 0 auto;">
         {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.title }}</td>
-                <td>{{ post.content }}</td>
-                <td>{{ post.author }}</td>
-                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
-                    <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 10px;">
+                <strong style="font-size: 1.3em;">{{ post.author }}</strong>
+                <br>
+                <small style="color: gray;">{{ post.getCreatedAt()|date('Y-m-d H:i') }}</small>
+                <p style="font-weight: bold; font-size: 1em; margin: 5px 0;">{{ post.title }}</p>
+                <p>{{ post.content }}</p>
 
-    <a href="{{ path('app_post_new') }}">Create new</a>
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <a href="{{ path('app_post_edit', {'id': post.id}) }}">Edit</a> | 
+                        <a href="{{ path('app_post_delete', {'id': post.id}) }}" onclick="return confirm('Are you sure?');">Delete</a>
+                    </div>
+                    <div>
+                        <a href="{{ path('app_comment_new', {'postId': post.id}) }}" class="btn btn-primary">Comment</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p style="text-align: center;">No posts found.</p>
+        {% endfor %}
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ path('app_post_new') }}" class="btn btn-success">Add New Post</a>
+        </div>
+    </div>
 {% endblock %}

@@ -14,14 +14,7 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('content')
-            ->add('author')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
-        ;
+            ->add('author');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

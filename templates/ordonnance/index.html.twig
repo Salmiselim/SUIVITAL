@@ -40,7 +40,13 @@
             </tbody>
         </table>
 
-<a href="{{ path('app_ordonnance_new', {'template': 'template2'}) }}" class="btn btn-success">Créer une ordonnance</a>
+<div class="d-flex justify-content-center">
+            {{ knp_pagination_render(ordonnances) }}
+        </div>
+
+        <div class="text-center mt-4">
+            </a>
+        </div>
     </div>
     
 {% endblock %}

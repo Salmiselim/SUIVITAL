@@ -5,27 +5,22 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Medicament;
-
-
+use Faker\Factory;
 class MedicamentFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $medicament = new Medicament();
-        $medicament->setOrdonnance(null);
-        $medicament->setName('Paracetamol');
-        $medicament->setDosage('500mg');
-        $medicament->setDuration('7 days');
-        $medicament->setFrequency('Twice a day');
+        $faker = Factory::create();
 
-        $manager->persist($medicament);
+        for ($i = 0; $i < 20; $i++) { 
+            $medicament = new Medicament();
+            $medicament->setName($faker->word());
+            $medicament->setDosage($faker->randomElement(['100mg', '250mg', '500mg', '1g'])); 
+            $medicament->setDuration($faker->numberBetween(3, 14));
+            $medicament->setFrequency($faker->randomElement(['Once a day', 'Twice a day', 'Three times a day']));
 
-        $medicament = new Medicament();
-        $medicament->setOrdonnance(null);
-        $medicament->setName('Ibuprofen');
-        $medicament->setDosage('200mg');
-        $medicament->setDuration('5 days');
-        $medicament->setFrequency('Three times a day');
+            $manager->persist($medicament);
+        }
 
         $manager->flush();
     }

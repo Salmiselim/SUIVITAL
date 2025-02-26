@@ -28,12 +28,11 @@ class OrdonnanceType extends AbstractType
                 'class' => Medicament::class,
                 'choice_label' => 'name',
                 'multiple' => true,  
-                'expanded' => false, 
+                'expanded' => true, 
                 'label' => 'Medications',
                 'by_reference' => false,
-                'attr' => ['class' => 'form-control scrollable-multiselect'], 
+                'attr' => ['class' => 'form-control scrollable-multiselect'],
             ])
-            
             
             ->add('patient', EntityType::class, [
                 'class' => Patient::class,
@@ -43,7 +42,7 @@ class OrdonnanceType extends AbstractType
             ])
            
             ->add('save', SubmitType::class, [
-                'label' => 'enregistrer Ordonnance',
+                'label' => 'enregistrer Ordonnance  ',
                 'attr' => ['class' => 'btn btn-primary mt-3'],
             ]);
     }

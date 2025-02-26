@@ -81,15 +81,5 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[Route('/{id}/ordonnances', name: 'app_user_ordonnances', methods: ['GET'])]
-    public function ordonnances(Patient $patient, OrdonnanceRepository $ordonnanceRepository): Response
-    {
-        $ordonnances = $ordonnanceRepository->findBy(['patient' => $patient]);
-
-        return $this->render('user/home.html.twig', [
-            'patient' => $patient,
-            'ordonnances' => $ordonnances,
-            'template' => 'template1',
-        ]);
-    }
+    
 }

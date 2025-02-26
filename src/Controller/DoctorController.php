@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 #[Route('/doctor')]
 final class DoctorController extends AbstractController
@@ -81,11 +82,23 @@ final class DoctorController extends AbstractController
     }
 
     #[Route('/home/{id}', name: 'app_doctor_home', methods: ['GET'])]
-    public function home(Doctor $doctor): Response
+    public function home(DoctorRepository $doctorRepository, int $id, RequestStack $requestStack): Response
     {
+        $doctor = $doctorRepository->find($id);
+    
+        if (!$doctor) {
+            throw $this->createNotFoundException('Doctor not found');
+        }
+
+        $session = $requestStack->getSession();
+        $session->set('doctorId', $id);
+    
         return $this->render('doctor/home.html.twig', [
             'doctor_name' => $doctor->getName(),
             'template' => 'template1',
         ]);
     }
+    
+    
+
 }

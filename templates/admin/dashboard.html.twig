@@ -4,131 +4,128 @@
 
 {% block content %}
     <div class="container mt-4">
-        <h1>Welcome to the Admin Dashboard</h1>
-        
-        <!-- First Row -->
-        <div class="info-box bg-success">
-  <span class="info-box-icon"><i class="far fa-flag"></i></span>
-  <div class="info-box-content">
-    <span class="info-box-text">Bookmarks</span>
-    <span class="info-box-number">410</span>
-  </div>
-</div>
-<div class="info-box bg-success">
-  <span class="info-box-icon"><i class="far fa-thumbs-up"></i></span>
-  <div class="info-box-content">
-    <span class="info-box-text">Likes</span>
-    <span class="info-box-number">41,410</span>
-    <div class="progress">
-      <div class="progress-bar" style="width: 70%"></div>
+        <h1 class="text-center mb-4">Bienvenue sur le tableau de bord administrateur</h1>
+        <div class="row justify-content-between">
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-info p-4">
+                    <div class="inner">
+                        <h3>{{med}}</h3>
+                        <p>nombre des medicaments</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-gradient-success p-4">
+                    <div class="inner">
+                        <h3>{{userCount}}</h3>
+                        <p>nombre des utilisateurs</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-gradient-warning p-4">
+                    <div class="inner">
+                        <h3>{{ord}}</h3>
+                        <p>nombre des ordonnaces</p>
+                    </div>
+                    <div class="icon">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-gradient-danger p-4">
+                    <div class="inner">
+                        <h3>{{rdv}}</h3>
+                        <p>totale des rendez-vous</p>
+                    </div>
+                    <div class="icon">
+                        <i class="far fa-bookmark"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+       
+<div class="card bg-gradient-info">
+  <div class="card-header border-0">
+    <h3 class="card-title">
+      <i class="fas fa-th mr-1"></i>
+      graphe de prise de medicament
+    </h3>
+    <div class="card-tools">
+      <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+        <i class="fas fa-minus"></i>
+      </button>
+      <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
-    <span class="progress-description">
-      70% Increase in 30 Days
-    </span>
+  </div>
+  <div class="card-body">
+    <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
   </div>
 </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Primary Card</h3>
-                        <div class="card-tools">
-                            <span class="badge badge-primary">Label</span>
-                        </div>
-                    </div>
-                    <div class="card-body">The body of the card</div>
-                    <div class="card-footer">The footer of the card</div>
-                </div>
-            </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var ctx = document.getElementById("line-chart").getContext("2d");
 
-            <div class="col-md-4">
-                <div class="card card-danger">
-                    <div class="card-header">
-                        <h3 class="card-title">Danger Card</h3>
-                        <div class="card-tools">
-                            <span class="badge badge-primary">Label</span>
-                        </div>
-                    </div>
-                    <div class="card-body">The body of the card</div>
-                    <div class="card-footer">The footer of the card</div>
-                </div>
-            </div>
+    var healthChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            datasets: [{
+                label: "Medication Taken (Pills per Day)",
+                data: Array.from({ length: 7 }, () => Math.floor(Math.random() * (5 - 1) + 1)), // Random pills between 1 and 5
+                borderColor: "rgba(255, 255, 255, 0.8)", 
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                borderWidth: 2,
+                tension: 0.4,
+                pointRadius: 5,
+                pointBackgroundColor: "#ffffff",
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                x: { ticks: { color: "#ffffff" } },
+                y: { 
+                    ticks: { color: "#ffffff", stepSize: 1, beginAtZero: true },
+                    suggestedMax: 5 
+                }
+            }
+        }
+    });
+});
+</script>
 
-            <div class="col-md-4">
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Success Card</h3>
-                        <div class="card-tools">
-                            <span class="badge badge-primary">Label</span>
-                        </div>
-                    </div>
-                    <div class="card-body">The body of the card</div>
-                    <div class="card-footer">The footer of the card</div>
-                </div>
-            </div>
+
+
         </div>
-
-        <!-- Second Row with Margin-Top -->
-        <div class="row mt-4">
-            <div class="col-md-4">
-                <div class="card card-outline card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Primary Card</h3>
-                        <div class="card-tools">
-                            <span class="badge badge-primary">Label</span>
-                        </div>
-                    </div>
-                    <div class="card-body">The body of the card</div>
-                    <div class="card-footer">The footer of the card</div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card card-outline card-danger">
-                    <div class="card-header">
-                        <h3 class="card-title">Danger Card</h3>
-                        <div class="card-tools">
-                            <span class="badge badge-primary">Label</span>
-                        </div>
-                    </div>
-                    <div class="card-body">The body of the card</div>
-                    <div class="card-footer">The footer of the card</div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card card-outline card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Success Card</h3>
-                        <div class="card-tools">
-                            <span class="badge badge-primary">Label</span>
-                        </div>
-                    </div>
-                    <div class="card-body">The body of the card</div>
-                    <div class="card-footer">The footer of the card</div>
-                </div>
-            </div>
-        </div>
-        <div class="info-box">
-  <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
-  <div class="info-box-content">
-    <span class="info-box-text">Messages</span>
-    <span class="info-box-number">1,410</span>
-  </div>
-</div>
-<div class="info-box">
-  <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
-  <div class="info-box-content">
-    <span class="info-box-text">Bookmarks</span>
-    <span class="info-box-number">41,410</span>
-    <div class="progress">
-      <div class="progress-bar bg-info" style="width: 70%"></div>
-    </div>
-    <span class="progress-description">
-      70% Increase in 30 Days
-    </span>
-  </div>
-</div>
-
     </div>
 {% endblock %}

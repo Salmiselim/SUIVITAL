@@ -1,8 +1,8 @@
-"use strict";
+"use strict";/* 
 (function() {
   var isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
 
-  if (isWindows) {
+ if (isWindows) {
     // if we are on windows OS we activate the perfectScrollbar function
     if (document.getElementsByClassName('main-content')[0]) {
       var mainpanel = document.querySelector('.main-content');
@@ -25,7 +25,7 @@
     };
   };
 })();
-
+*/
 // Verify navbar blur on scroll
 if (document.getElementById('navbarBlur') && document.getElementById('navbarBlur').getAttribute('data-scroll') == 'true') {
   navbarBlurOnScroll('navbarBlur');

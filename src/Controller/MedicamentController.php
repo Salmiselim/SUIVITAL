@@ -10,15 +10,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 #[Route('/medicament')]
 final class MedicamentController extends AbstractController
 {
     #[Route(name: 'app_medicament_index', methods: ['GET'])]
-    public function index(MedicamentRepository $medicamentRepository): Response
-    {
+    public function index(
+        MedicamentRepository $medicamentRepository, 
+        PaginatorInterface $paginator, 
+        Request $request
+    ): Response {
+        $query = $medicamentRepository->findAll(); 
+
+        $medicaments = $paginator->paginate(
+            $query, 
+            $request->query->getInt('page', 1), 
+         5
+        );
+
         return $this->render('medicament/index.html.twig', [
-            'medicaments' => $medicamentRepository->findAll(),
+            'medicaments' => $medicaments,
             'template' => 'template2',
         ]);
     }

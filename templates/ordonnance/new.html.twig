@@ -14,11 +14,21 @@
                     {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.description) }}
                 </div>
- <div class="form-group">
+<div class="form-group">
     {{ form_label(form.medicaments, 'Medications') }}
-    {{ form_widget(form.medicaments, {'attr': {'class': 'form-control scrollable-multiselect'}}) }}
+    <div class="scrollable-checkbox-container">
+        {% for choice in form.medicaments %}
+            <div>
+                {{ form_widget(choice) }}
+                <label for="{{ choice.vars.id }}">{{ choice.vars.label }}</label>
+            </div>
+        {% endfor %}
+    </div>
     {{ form_errors(form.medicaments) }}
 </div>
+    
+
+
 
                 <div class="form-group">
                     {{ form_label(form.patient, 'Patient') }}
@@ -28,7 +38,7 @@
       
                 <div class="form-group">
                     {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary mt-3'}}) }}
-                </div>
+                </div>  
             {{ form_end(form) }}
         </div>
 

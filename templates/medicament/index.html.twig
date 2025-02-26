@@ -36,6 +36,12 @@
         {% endfor %}
         </tbody>
     </table>
+<div class="d-flex justify-content-center">
+            {{ knp_pagination_render(medicaments) }}
+        </div>
 
+        <div class="text-center mt-4">
+            </a>
+        </div>
     <a href="{{ path('app_medicament_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}

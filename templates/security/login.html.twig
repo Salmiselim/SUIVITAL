@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Se connecter{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4 border-0" style="max-width: 500px; width: 100%; border-radius: 12px;">
+        <div class="card-body">
+            <h1 class="h4 text-success font-weight-bold text-center mb-3">Se connecter</h1>
+
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-success">Déconnexion</a>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="inputEmail" class="font-weight-bold text-success">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control rounded-pill shadow-sm" autocomplete="email" required autofocus placeholder="exemple@exemple.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputPassword" class="font-weight-bold text-success">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control rounded-pill shadow-sm" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="form-check mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me" class="form-check-input"> Se souvenir de moi
+                    </label>
+                </div>
+
+                <button class="btn btn-success btn-lg btn-block rounded-pill shadow-sm" type="submit">Se connecter</button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-muted">Vous n'avez pas encore de compte? <a href="{{ path('app_register') }}" class="text-success">Créez-en un</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

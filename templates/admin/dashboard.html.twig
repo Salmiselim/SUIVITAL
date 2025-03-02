@@ -22,7 +22,7 @@
             <div class="col-md-3 mb-4">
                 <div class="small-box bg-gradient-success p-4">
                     <div class="inner">
-                        <h3>{{ (doctorCount + patientCount)|default(0) }}</h3>
+                        <h3>5</h3>
                         <p>Nombre des utilisateurs</p>
                     </div>
                     <div class="icon">
@@ -89,7 +89,7 @@
             }
         });
     </script>
-{% block body %}
+
 <div class="container-fluid d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-lg p-4 border-0 w-100" style="max-width: 1200px; height: 90%; border-radius: 12px;">
         <div class="card-body">
@@ -125,7 +125,7 @@
                                 <td>{{ user.nom }} {{ user.prenom }}</td>
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.roles|join(', ') }}</td>
-                                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
+                                <td></td>
                                 <td>
                                     {% if 'ROLE_DOCTOR' in user.roles and not user.isVerified %}
                                         <a href="{{ path('app_admin_verify', {'id': user.id}) }}" class="btn btn-warning btn-sm rounded-pill">Verify</a>

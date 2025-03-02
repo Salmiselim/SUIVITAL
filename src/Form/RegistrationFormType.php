@@ -1,4 +1,18 @@
 <?php
+namespace App\Entity;
+
+use App\Repository\PatientRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: PatientRepository::class)]
+class Patient extends User
+{
+    public function getRoles(): array
+    {
+        return ['ROLE_PATIENT'];
+    }
+}
+
 // src/Form/RegistrationFormType.php
 namespace App\Form;
 
@@ -30,11 +44,13 @@ class RegistrationFormType extends AbstractType
                 ],
                 'mapped' => false,
                 'label' => 'Select your role',
+                'attr' => ['id' => 'role-selector'],
             ])
             ->add('proof', FileType::class, [
                 'mapped' => false,
                 'required' => false,
                 'label' => 'Upload proof (for doctors only)',
+                'attr' => ['id' => 'proof-field'],
             ]);
     }
 

@@ -12,15 +12,25 @@
                     <p class="text-white mt-3">
                         La plateforme de suivi de santé intelligente qui vous aide à surveiller vos prescriptions, rendez-vous médicaux et plus encore !
                     </p>
-                    <a href="#" class="btn btn-white mt-4">
-                        Commencer <i class="ni ni-bold-right ml-2"></i>
-                    </a>
+                  <div class="mt-4">
+            <a href="{{ path('app_register') }}" 
+               class="btn btn-success btn-lg animate__animated animate__bounceInLeft" 
+               style="animation-duration: 1s;">
+                Sign Up
+            </a>
+            <a href="{{ path('app_login') }}" 
+               class="btn btn-outline-light btn-lg animate__animated animate__bounceInRight" 
+               style="animation-duration: 1s;">
+                Log In
+            </a>
+        </div> 
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Features Section -->
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-4">
@@ -61,83 +71,70 @@
     </div>
 </div>
 
+<!-- Call to Action -->
 <div class="container text-center mt-5">
     <h2 class="mb-4">Prêt à prendre soin de votre santé ?</h2>
-  <a href="{{ path('app_ordonnance_new', {'template': 'template1'}) }}" class="btn btn-success btn-lg">
-    Créer une ordonnance <i class="ni ni-fat-add ml-2"></i>
-</a>
-
+    <a href="{{ path('app_ordonnance_new', {'template': 'template1'}) }}" class="btn btn-success btn-lg">
+        Créer une ordonnance <i class="ni ni-fat-add ml-2"></i>
+    </a>
 </div>
 
-{% block title %}Welcome to Suivital{% endblock %}
 
-{% block body %}
-    <div class="container-fluid vh-100 d-flex justify-content-center align-items-center" style="background: url('https://www.example.com/background.jpg') no-repeat center center; background-size: cover;">
-        <div class="text-center text-white p-5 rounded shadow-lg" style="background: rgba(0, 0, 0, 0.6); border-radius: 15px;">
-            <h1 class="display-4 animate__animated animate__fadeInUp animate__delay-1s" style="animation-duration: 1.5s; color: #28a745; font-weight: bold;">Welcome to Suivital</h1>
-            <p class="lead animate__animated animate__fadeInUp animate__delay-1.2s" style="animation-duration: 1.8s;">Your health, our priority.</p>
+<!-- Optimized Animations -->
+<style>
+    .animate__animated {
+        animation-duration: 1.5s;
+    }
 
-            <div class="mt-4">
-                <a href="{{ path('app_register') }}" class="btn btn-success btn-lg animate__animated animate__bounceInLeft animate__delay-1.5s" style="animation-duration: 1s;">Sign Up</a>
-                <a href="{{ path('app_login') }}" class="btn btn-outline-light btn-lg animate__animated animate__bounceInRight animate__delay-1.5s" style="animation-duration: 1s;">Log In</a>
-            </div> 
-        </div>
-    </div>
+    .animate__fadeInUp {
+        animation-name: fadeInUp;
+    }
 
-    <style>
-        .animate__animated {
-            animation-duration: 1.5s;
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
         }
-
-        .animate__fadeInUp {
-            animation-name: fadeInUp;
+        100% {
+            opacity: 1;
+            transform: translateY(0);
         }
+    }
 
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .animate__bounceInLeft {
+        animation-name: bounceInLeft;
+    }
 
-        .animate__bounceInLeft {
-            animation-name: bounceInLeft;
+    @keyframes bounceInLeft {
+        0% {
+            opacity: 0;
+            transform: translateX(-100%);
         }
+        60% {
+            opacity: 1;
+            transform: translateX(30px);
+        }
+        100% {
+            transform: translateX(0);
+        }
+    }
 
-        @keyframes bounceInLeft {
-            0% {
-                opacity: 0;
-                transform: translateX(-100%);
-            }
-            60% {
-                opacity: 1;
-                transform: translateX(30px);
-            }
-            100% {
-                transform: translateX(0);
-            }
-        }
+    .animate__bounceInRight {
+        animation-name: bounceInRight;
+    }
 
-        .animate__bounceInRight {
-            animation-name: bounceInRight;
+    @keyframes bounceInRight {
+        0% {
+            opacity: 0;
+            transform: translateX(100%);
         }
-
-        @keyframes bounceInRight {
-            0% {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-            60% {
-                opacity: 1;
-                transform: translateX(-30px);
-            }
-            100% {
-                transform: translateX(0);
-            }
+        60% {
+            opacity: 1;
+            transform: translateX(-30px);
         }
-    </style>
+        100% {
+            transform: translateX(0);
+        }
+    }
+</style>
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block title %}Creez votre compte{% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-lg p-4 border-0" style="max-width: 500px; width: 100%; border-radius: 12px;">
         <div class="card-body">
@@ -52,6 +52,7 @@
                 {{ form_errors(registrationForm.role, {'attr': {'class': 'text-danger'}}) }}
             </div>
 
+
             {# Proof Field (for Doctors) #}
             <div class="form-group" id="proof-field">
                 {{ form_label(registrationForm.proof, null, {'label_attr': {'class': 'font-weight-bold text-success'}}) }}
@@ -93,5 +94,28 @@
         roleField.addEventListener('change', toggleProofField);
         toggleProofField(); // Initial check
     });
+   document.addEventListener("DOMContentLoaded", function() {
+    const roleSelector = document.getElementById("role-selector");
+    const dateOfBirthField = document.getElementById("date-of-birth-field");
+    const proofField = document.getElementById("proof-field");
+
+    function toggleFields() {
+        const selectedRole = roleSelector.value;
+        if (selectedRole === "ROLE_PATIENT") {
+            dateOfBirthField.style.display = "block";
+            proofField.style.display = "none";
+        } else if (selectedRole === "ROLE_DOCTOR") {
+            dateOfBirthField.style.display = "none";
+            proofField.style.display = "block";
+        } else {
+            dateOfBirthField.style.display = "none";
+            proofField.style.display = "none";
+        }
+    }
+
+    roleSelector.addEventListener("change", toggleFields);
+    toggleFields(); // Run on page load
+});
+
 </script>
 {% endblock %}

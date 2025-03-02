@@ -98,7 +98,14 @@ final class DoctorController extends AbstractController
             'template' => 'template1',
         ]);
     }
-    
+    #[Route('/users', name: 'app_doctor_dashboard')]
+    public function userlist(): Response
+    {
+        $user = $this->getUser();
+        return $this->render('doctor/dashboard.html.twig', [
+            'user' => $user,
+        ]);
+    }
     
 
 }

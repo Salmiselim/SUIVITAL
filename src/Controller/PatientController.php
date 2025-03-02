@@ -133,4 +133,13 @@ final class PatientController extends AbstractController
             ]
         );
     }
+    #[Route('/patient', name: 'app_patient_dashboard')]
+    public function patients(): Response
+    {
+        $user = $this->getUser();
+        return $this->render('patient/dashboard.html.twig', [
+            'user' => $user,
+        ]);
+    }
+        
 }    

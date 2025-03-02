@@ -50,6 +50,9 @@
     "knplabs/knp-paginator-bundle": {
         "version": "v6.6.1"
     },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.6.1"
+    },
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {
@@ -331,6 +334,9 @@
             "./package.json",
             "./webpack.config.js"
         ]
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.17.3"
     },
     "twig/extra-bundle": {
         "version": "v3.19.0"

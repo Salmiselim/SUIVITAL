@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('dist/img/AdminLTELogo.png') }}">
+
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+    
+    {% block css %}{% endblock %}
+</head>
+
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+<div class="app-wrapper">
+
+    <!-- Navbar -->
+    {% include 'partials/admin_navbar.html.twig' %}
+
+    <!-- Sidebar -->
+    {% include 'partials/sidebar.html.twig' %}
+
+    <!-- Content Wrapper -->
+   <!-- Content Wrapper -->
+   <main class="app-main">
+        <div class="content-wrapper d-flex flex-column min-vh-100" style="margin-left: 250px;">
+            <section class="content flex-grow-1 d-flex">
+                <div class="container-fluid flex-grow-1 d-flex flex-column">
+                    {% block body %}{% endblock %}
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="main-footer text-center mt-auto">
+                <strong>Copyright &copy; 2025 <a href="#">Suivital</a>.</strong> All rights reserved.
+            </footer>
+        </div>
+    </div>
+
+</div>
+<!-- Scripts -->
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+
+{% block js %}{% endblock %}
+</body>
+</html>

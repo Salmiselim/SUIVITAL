@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reponse{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Reponse Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th class="text-uppercase text-secondary font-weight-bold">ID</th>
+                                    <td>{{ reponse.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase text-secondary font-weight-bold">User ID</th>
+                                    <td>{{ reponse.userId }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase text-secondary font-weight-bold">Date</th>
+                                    <td>{{ reponse.date ? reponse.date|date('Y-m-d H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase text-secondary font-weight-bold">Objet</th>
+                                    <td>{{ reponse.objet }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase text-secondary font-weight-bold">Commentaire</th>
+                                    <td>{{ reponse.commentaire }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ path('app_reponses_index') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        
+                        <a href="{{ path('app_reponses_edit', {'id': reponse.id}) }}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        
+                        {{ include('reponses/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

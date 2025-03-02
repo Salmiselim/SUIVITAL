@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Reponse{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-gradient-primary text-white">
+            <h3 class="mb-0">Edit Reponse</h3>
+        </div>
+        <div class="card-body">
+            {{ include('reponses/_form.html.twig', {'button_label': 'Update'}) }}
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <a href="{{ path('app_reponses_index') }}" class="btn btn-secondary">
+                <i class="ni ni-bold-left"></i> Back to list
+            </a>
+            {{ include('reponses/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

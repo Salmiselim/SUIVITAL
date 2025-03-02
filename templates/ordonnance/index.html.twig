@@ -3,50 +3,135 @@
 {% block title %}Ordonnance Index{% endblock %}
 
 {% block content %} 
-   <div class="container mt-4">
-        <h1 class="mb-4">Liste des ordonnances</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Liste des ordonnances</h1>
 
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Id</th>
-                    <th>patient</th>
-                    <th>Date Prescription</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for ordonnance in ordonnances %}
-                <tr>
-                    <td>{{ ordonnance.id }}</td>
-                    <td>{{ ordonnance.patient.name }}</td>
-                    <td>{{ ordonnance.datePrescription ? ordonnance.datePrescription|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>
-                        <a href="{{ path('app_ordonnance_show', {'id': ordonnance.id ,'template': template}) }}" class="btn btn-info btn-sm">Show</a>
-                        <a href="{{ path('app_ordonnance_edit', {'id': ordonnance.id,'template': template}) }}" class="btn btn-warning btn-sm">Edit</a>
-
-
-                        <form method="post" action="{{ path('app_ordonnance_delete', {'id': ordonnance.id}) }}" onsubmit="return confirm('confirmer votre action');" style="display:inline;">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ordonnance.id) }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4" class="text-center">No records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-<div class="d-flex justify-content-center">
-            {{ knp_pagination_render(ordonnances) }}
+    <!-- Filters -->
+    <form id="filter-form" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-3 position-relative">
+                <input type="text" id="patient_name" name="patient_name" class="form-control" placeholder="Nom du patient" value="{{ app.request.query.get('patient_name') }}" autocomplete="off">
+                <div id="patient_suggestions" class="list-group position-absolute w-100"></div>
+            </div>
+            <div class="col-md-3 position-relative">
+                <input type="text" id="doctor_name" name="doctor_name" class="form-control" placeholder="Nom du docteur" value="{{ app.request.query.get('doctor_name') }}" autocomplete="off">
+                <div id="doctor_suggestions" class="list-group position-absolute w-100"></div>
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="date_prescription" name="date_prescription" class="form-control" value="{{ app.request.query.get('date_prescription') }}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+                <a href="{{ path('app_ordonnance_index') }}" class="btn btn-secondary">Réinitialiser</a>
+            </div>
         </div>
+    </form>
 
-        <div class="text-center mt-4">
-            </a>
-        </div>
+    <!-- Table -->
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Patient</th>
+                <th>Docteur</th>
+                <th>Date Prescription</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="ordonnance-list">
+        {% for ordonnance in ordonnances %}
+            <tr>
+                <td>{{ ordonnance.id }}</td>
+                <td class="patient-name">{{ ordonnance.patient.name }}</td>
+                <td class="doctor-name">Dr.{{ ordonnance.doctor.name }}</td>
+                <td>{{ ordonnance.datePrescription ? ordonnance.datePrescription|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_ordonnance_show', {'id': ordonnance.id ,'template': template}) }}" class="btn btn-info btn-sm">Show</a>
+                    <a href="{{ path('app_ordonnance_edit', {'id': ordonnance.id,'template': template}) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form method="post" action="{{ path('app_ordonnance_delete', {'id': ordonnance.id}) }}" onsubmit="return confirm('Confirmer votre action ?');" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ordonnance.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr id="no-results">
+                <td colspan="5" class="text-center">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center">
+        {{ knp_pagination_render(ordonnances) }}
     </div>
+</div>
+
+<!-- JavaScript for Autocomplete & Live Filtering -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function setupAutocomplete(inputId, suggestionBoxId, searchUrl) {
+        let input = document.getElementById(inputId);
+        let suggestionBox = document.getElementById(suggestionBoxId);
+
+        input.addEventListener("input", function () {
+            let query = input.value.trim();
+            if (query.length < 1) {
+                suggestionBox.innerHTML = "";
+                return;
+            }
+
+            fetch(searchUrl + "?q=" + encodeURIComponent(query))
+                .then(response => response.json())
+                .then(data => {
+                    suggestionBox.innerHTML = "";
+                    data.forEach(name => {
+                        let suggestion = document.createElement("div");
+                        suggestion.classList.add("list-group-item", "list-group-item-action");
+                        suggestion.textContent = name;
+                        suggestion.addEventListener("click", function () {
+                            input.value = name;
+                            suggestionBox.innerHTML = "";
+                            filterTable();
+                        });
+                        suggestionBox.appendChild(suggestion);
+                    });
+                });
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!input.contains(event.target) && !suggestionBox.contains(event.target)) {
+                suggestionBox.innerHTML = "";
+            }
+        });
+    }
+
+    function filterTable() {
+        let patientQuery = document.getElementById("patient_name").value.toLowerCase();
+        let doctorQuery = document.getElementById("doctor_name").value.toLowerCase();
+        let rows = document.querySelectorAll("#ordonnance-list tr");
+        let hasResults = false;
+
+        rows.forEach(row => {
+            let patientName = row.querySelector(".patient-name")?.textContent.toLowerCase() || "";
+            let doctorName = row.querySelector(".doctor-name")?.textContent.toLowerCase() || "";
+            let matches = patientName.includes(patientQuery) && doctorName.includes(doctorQuery);
+
+            row.style.display = matches ? "" : "none";
+            if (matches) hasResults = true;
+        });
+
+        document.getElementById("no-results").style.display = hasResults ? "none" : "";
+    }
+
+    document.getElementById("patient_name").addEventListener("input", filterTable);
+    document.getElementById("doctor_name").addEventListener("input", filterTable);
+    document.getElementById("date_prescription").addEventListener("change", filterTable);
+
+    setupAutocomplete("patient_name", "patient_suggestions", "{{ path('search_patient') }}");
+    setupAutocomplete("doctor_name", "doctor_suggestions", "{{ path('search_doctor') }}");
+});
+</script>
     
+
 {% endblock %}

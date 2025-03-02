@@ -1,47 +1,126 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Medicament index{% endblock %}
+{% block title %}Medicament Index{% endblock %}
 
 {% block content %} 
-    <h1>liste des medicaments:</h1>
-   <div class="container mt-4">
+<div class="container mt-4">
+    <h1 class="mb-4">Liste des Médicaments</h1>
+
+    <!-- Filters -->
+    <form id="filter-form" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 position-relative">
+                <input type="text" id="medicament_name" name="medicament_name" class="form-control" placeholder="Nom du médicament" value="{{ app.request.query.get('medicament_name') }}" autocomplete="off">
+                <div id="medicament_suggestions" class="list-group position-absolute w-100"></div>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+                <a href="{{ path('app_medicament_index') }}" class="btn btn-secondary">Réinitialiser</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Table -->
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>Dosage</th>
-                <th>Duration</th>
-                <th>Frequency</th>
-                <th>actions</th>
+                <th>Durée</th>
+                <th>Fréquence</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="medicament-list">
         {% for medicament in medicaments %}
             <tr>
                 <td>{{ medicament.id }}</td>
-                <td>{{ medicament.name }}</td>
+                <td class="medicament-name">{{ medicament.name }}</td>
                 <td>{{ medicament.dosage }}</td>
                 <td>{{ medicament.duration }}</td>
                 <td>{{ medicament.frequency }}</td>
                 <td>
-                    <a href="{{ path('app_medicament_show', {'id': medicament.id}) }}" class="btn btn-info btn-sm">show</a>
-                    <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}" class="btn btn-warning btn-sm">edit</a>
+                    <a href="{{ path('app_medicament_show', {'id': medicament.id}) }}" class="btn btn-info btn-sm">Show</a>
+                    <a href="{{ path('app_medicament_edit', {'id': medicament.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form method="post" action="{{ path('app_medicament_delete', {'id': medicament.id}) }}" onsubmit="return confirm('Confirmer votre action ?');" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ medicament.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </td>
             </tr>
         {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
+            <tr id="no-results">
+                <td colspan="6" class="text-center">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-<div class="d-flex justify-content-center">
-            {{ knp_pagination_render(medicaments) }}
-        </div>
 
-        <div class="text-center mt-4">
-            </a>
-        </div>
-    <a href="{{ path('app_medicament_new') }}" class="btn btn-success">Create new</a>
+    <div class="d-flex justify-content-center">
+        {{ knp_pagination_render(medicaments) }}
+    </div>
+</div>
+
+<!-- JavaScript for Autocomplete & Live Filtering -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function setupAutocomplete(inputId, suggestionBoxId, searchUrl) {
+        let input = document.getElementById(inputId);
+        let suggestionBox = document.getElementById(suggestionBoxId);
+
+        input.addEventListener("input", function () {
+            let query = input.value.trim();
+            if (query.length < 1) {
+                suggestionBox.innerHTML = "";
+                return;
+            }
+
+            fetch(searchUrl + "?q=" + encodeURIComponent(query))
+                .then(response => response.json())
+                .then(data => {
+                    suggestionBox.innerHTML = "";
+                    data.forEach(name => {
+                        let suggestion = document.createElement("div");
+                        suggestion.classList.add("list-group-item", "list-group-item-action");
+                        suggestion.textContent = name;
+                        suggestion.addEventListener("click", function () {
+                            input.value = name;
+                            suggestionBox.innerHTML = "";
+                            filterTable();
+                        });
+                        suggestionBox.appendChild(suggestion);
+                    });
+                });
+        });
+
+        document.addEventListener("click", function (event) {
+            if (!input.contains(event.target) && !suggestionBox.contains(event.target)) {
+                suggestionBox.innerHTML = "";
+            }
+        });
+    }
+
+    function filterTable() {
+        let medicamentQuery = document.getElementById("medicament_name").value.toLowerCase();
+        let rows = document.querySelectorAll("#medicament-list tr");
+        let hasResults = false;
+
+        rows.forEach(row => {
+            let medicamentName = row.querySelector(".medicament-name")?.textContent.toLowerCase() || "";
+            let matches = medicamentName.includes(medicamentQuery);
+
+            row.style.display = matches ? "" : "none";
+            if (matches) hasResults = true;
+        });
+
+        document.getElementById("no-results").style.display = hasResults ? "none" : "";
+    }
+
+    document.getElementById("medicament_name").addEventListener("input", filterTable);
+
+    setupAutocomplete("medicament_name", "medicament_suggestions", "{{ path('search_medicament') }}");
+});
+</script>
+
 {% endblock %}

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 #[Route('/medicament')]
@@ -22,19 +23,24 @@ final class MedicamentController extends AbstractController
         PaginatorInterface $paginator, 
         Request $request
     ): Response {
-        $query = $medicamentRepository->findAll(); 
-
-        $medicaments = $paginator->paginate(
-            $query, 
-            $request->query->getInt('page', 1), 
-         5
-        );
-
+        $search = $request->query->get('search');
+    
+        $queryBuilder = $medicamentRepository->createQueryBuilder('m');
+    
+        if ($search) {
+            $queryBuilder->andWhere('m.name LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+    
+        $query = $queryBuilder->getQuery();
+        $medicaments = $paginator->paginate($query, $request->query->getInt('page', 1), 5);
+    
         return $this->render('medicament/index.html.twig', [
             'medicaments' => $medicaments,
             'template' => 'template2',
         ]);
     }
+    
 
     #[Route('/new', name: 'app_medicament_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -96,4 +102,20 @@ final class MedicamentController extends AbstractController
 
         return $this->redirectToRoute('app_medicament_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/search-medicament', name: 'search_medicament', methods: ['GET'])]
+public function searchMedicament(Request $request, MedicamentRepository $medicamentRepository): JsonResponse
+{
+    $query = $request->query->get('q');
+    $medicaments = $medicamentRepository->createQueryBuilder('m')
+        ->where('m.name LIKE :query')
+        ->setParameter('query', '%' . $query . '%')
+        ->setMaxResults(10)
+        ->getQuery()
+        ->getResult();
+
+    $medicamentNames = array_map(fn($medicament) => $medicament->getName(), $medicaments);
+    
+    return $this->json($medicamentNames);
+}
+
 }

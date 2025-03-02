@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -21,17 +22,29 @@
 <body class="g-sidenav-show bg-gray-100">
 
     <!-- Sidebar -->
-{% include 'partials/sidebar.html.twig' %}
+    {% include 'partials/sidebar.html.twig' %}
 
     <div class="main-content" id="panel">
         <!-- Navbar -->
-        
+        <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-light">
+            <!-- Add your navbar content here -->
+        </nav>
 
         <!-- Main Content -->
-        <div class="container-fluid">
+        <div class="container-fluid mt-4">
             {% block body %}{% endblock %}
         </div>
     </div>
+
+    <!-- Flash Messages -->
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
 
     <!-- Core JS Files -->
     <script src="{{ asset('assets/js/core/jquery.min.js') }}"></script>
@@ -40,5 +53,5 @@
 
     {% block js %}{% endblock %}
 </body>
-</html>
 
+</html>

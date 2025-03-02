@@ -1,7 +1,42 @@
+{# templates/dashboard/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-    <h1>Welcome to the Dashboard!</h1>
+    <div class="container mt-5">
+        <h1 class="display-4">Welcome to the Dashboard!</h1>
+        
+        <div class="mt-4">
+            <p>This is your main dashboard. From here, you can manage your settings, view important data, and more.</p>
+        </div>
+
+        <!-- Example of additional sections for user interaction -->
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Quick Links</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ path('app_profile') }}">Profile</a></li>
+                            <li class="list-group-item"><a href="{{ path('app_settings') }}">Settings</a></li>
+                            <li class="list-group-item"><a href="{{ path('app_logout') }}">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Recent Activity</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">You signed in at 9:00 AM today.</li>
+                            <li class="list-group-item">You updated your profile yesterday.</li>
+                            <li class="list-group-item">You received a new message from Admin.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to Suivital{% endblock %}
+
+{% block body %}
+    <div class="container-fluid vh-100 d-flex justify-content-center align-items-center" style="background: url('https://www.example.com/background.jpg') no-repeat center center; background-size: cover;">
+        <div class="text-center text-white p-5 rounded shadow-lg" style="background: rgba(0, 0, 0, 0.6); border-radius: 15px;">
+            <h1 class="display-4 animate__animated animate__fadeInUp animate__delay-1s" style="animation-duration: 1.5s; color: #28a745; font-weight: bold;">Welcome to Suivital</h1>
+            <p class="lead animate__animated animate__fadeInUp animate__delay-1.2s" style="animation-duration: 1.8s;">Your health, our priority.</p>
+
+            <div class="mt-4">
+                <a href="{{ path('app_register') }}" class="btn btn-success btn-lg animate__animated animate__bounceInLeft animate__delay-1.5s" style="animation-duration: 1s;">Sign Up</a>
+                <a href="{{ path('app_login') }}" class="btn btn-outline-light btn-lg animate__animated animate__bounceInRight animate__delay-1.5s" style="animation-duration: 1s;">Log In</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .animate__animated {
+            animation-duration: 1.5s;
+        }
+
+        .animate__fadeInUp {
+            animation-name: fadeInUp;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate__bounceInLeft {
+            animation-name: bounceInLeft;
+        }
+
+        @keyframes bounceInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            60% {
+                opacity: 1;
+                transform: translateX(30px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .animate__bounceInRight {
+            animation-name: bounceInRight;
+        }
+
+        @keyframes bounceInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            60% {
+                opacity: 1;
+                transform: translateX(-30px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+    </style>
+{% endblock %}

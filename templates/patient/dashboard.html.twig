@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4 border-0" style="max-width: 900px; width: 100%; border-radius: 12px;">
+        <div class="card-body">
+            <h1 class="h4 text-success font-weight-bold text-center mb-4">Welcome, {{ user.nom }} {{ user.prenom }}!</h1>
+            <p class="text-center">This is your patient dashboard.</p>
+
+            <div class="text-center mt-4">
+                <p>In this dashboard, you'll be able to:</p>
+                <ul class="list-unstyled">
+                    <li><strong>Track your appointments</strong></li>
+                    <li><strong>View your medical history</strong></li>
+                    <li><strong>Update your personal information</strong></li>
+                </ul>
+                <p class="text-muted">Stay healthy and manage your appointments efficiently!</p>
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+                <a href="#" class="btn btn-success btn-lg btn-block rounded-pill shadow-sm mx-2">My Appointments</a>
+                <a href="#" class="btn btn-primary btn-lg btn-block rounded-pill shadow-sm mx-2">My Medical History</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

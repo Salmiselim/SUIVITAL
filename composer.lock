@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
+    "content-hash": "35964432a26c796d9422e58e8cf2c39e",
+=======
     "content-hash": "47590bca005a607458c02a73d7c0cc03",
+>>>>>>> bb9e0a621a23b9b2737377207fb1c79dfd141d1f
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1749,6 +1753,8 @@
             "time": "2024-10-07T16:11:50+00:00"
         },
         {
+<<<<<<< HEAD
+=======
             "name": "masterminds/html5",
             "version": "2.9.0",
             "source": {
@@ -1816,6 +1822,7 @@
             "time": "2024-03-31T07:05:07+00:00"
         },
         {
+>>>>>>> bb9e0a621a23b9b2737377207fb1c79dfd141d1f
             "name": "monolog/monolog",
             "version": "3.8.1",
             "source": {
@@ -10779,7 +10786,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10787,6 +10794,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

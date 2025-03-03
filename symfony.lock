@@ -38,6 +38,8 @@
             "./migrations/.gitignore"
         ]
     },
+<<<<<<< HEAD
+=======
     "easycorp/easyadmin-bundle": {
         "version": "4.24",
         "recipe": {
@@ -50,6 +52,7 @@
     "knplabs/knp-paginator-bundle": {
         "version": "v6.6.1"
     },
+>>>>>>> bb9e0a621a23b9b2737377207fb1c79dfd141d1f
     "knplabs/knp-paginator-bundle": {
         "version": "v6.6.1"
     },

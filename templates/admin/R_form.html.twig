@@ -7,35 +7,35 @@
         {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
         <div class="mb-3">
-    {{ form_label(form.objet, 'Objet', {'label_attr': {'class': 'form-label'}}) }}
-    {{ form_widget(form.objet, {
-        'attr': {
-            'class': 'form-control' ~ (form.objet.vars.errors|length > 0 ? ' is-invalid' : ''),
-            'placeholder': 'Objet de la réclamation'
-        }
-    }) }}
-    {% if form.objet.vars.errors|length > 0 %}
-        <div class="invalid-feedback">
-            {{ form_errors(form.objet) }}
+            {{ form_label(form.objet, 'Objet', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.objet, {
+                'attr': {
+                    'class': 'form-control' ~ (form.objet.vars.errors|length > 0 ? ' is-invalid' : ''),
+                    'placeholder': 'Objet de la réclamation'
+                }
+            }) }}
+            {% if form.objet.vars.errors|length > 0 %}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.objet) }}
+                </div>
+            {% endif %}
         </div>
-    {% endif %}
-</div>
 
-<div class="mb-3">
-    {{ form_label(form.commentaire, 'Commentaire', {'label_attr': {'class': 'form-label'}}) }}
-    {{ form_widget(form.commentaire, {
-        'attr': {
-            'class': 'form-control' ~ (form.commentaire.vars.errors|length > 0 ? ' is-invalid' : ''),
-            'rows': '4',
-            'placeholder': 'Décrivez votre réclamation'
-        }
-    }) }}
-    {% if form.commentaire.vars.errors|length > 0 %}
-        <div class="invalid-feedback">
-            {{ form_errors(form.commentaire) }}
+        <div class="mb-3">
+            {{ form_label(form.commentaire, 'Commentaire', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.commentaire, {
+                'attr': {
+                    'class': 'form-control' ~ (form.commentaire.vars.errors|length > 0 ? ' is-invalid' : ''),
+                    'rows': '4',
+                    'placeholder': 'Décrivez votre réclamation'
+                }
+            }) }}
+            {% if form.commentaire.vars.errors|length > 0 %}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.commentaire) }}
+                </div>
+            {% endif %}
         </div>
-    {% endif %}
-</div>
 
         <div class="mb-3">
             {{ form_label(form.date, 'Date', {'label_attr': {'class': 'form-label'}}) }}

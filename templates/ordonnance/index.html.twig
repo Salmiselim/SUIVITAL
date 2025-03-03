@@ -2,9 +2,10 @@
 
 {% block title %}Ordonnance Index{% endblock %}
 
-{% block content %} 
+{% block content %}
+    {{ dump(ordonnances) }} 
 <div class="container mt-4">
-    <h1 class="mb-4">Liste des ordonnances</h1>
+    <h1 class="mb-4">Liste des ordonnancesss</h1>
 
     <!-- Filters -->
     <form id="filter-form" method="get" class="mb-4">
@@ -42,8 +43,8 @@
         {% for ordonnance in ordonnances %}
             <tr>
                 <td>{{ ordonnance.id }}</td>
-                <td class="patient-name">{{ ordonnance.patient.name }}</td>
-                <td class="doctor-name">Dr.{{ ordonnance.doctor.name }}</td>
+                <td class="patient-name">{{ ordonnance.patient.nom }}</td>
+                <td class="doctor-name">Dr.{{ ordonnance.doctor.nom }}</td>
                 <td>{{ ordonnance.datePrescription ? ordonnance.datePrescription|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_ordonnance_show', {'id': ordonnance.id ,'template': template}) }}" class="btn btn-info btn-sm">Show</a>
@@ -61,7 +62,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+{{ dump(ordonnances) }}
     <div class="d-flex justify-content-center">
         {{ knp_pagination_render(ordonnances) }}
     </div>
@@ -133,5 +134,4 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
     
-
 {% endblock %}

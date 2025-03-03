@@ -14,7 +14,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\OrdonnanceRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use App\Entity\Ordonnance;  
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 #[Route('/patient')]
 final class PatientController extends AbstractController
@@ -103,34 +104,23 @@ final class PatientController extends AbstractController
         return $this->redirectToRoute('app_patient_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id<\d+>}/ordonnances', name: 'app_user_ordonnances', methods: ['GET'])]
-    public function ordonnances(int $id, PatientRepository $patientRepository, OrdonnanceRepository $ordonnanceRepository, PaginatorInterface $paginator, Request $request): Response
+    #[Route('/ordonnances', name: 'app_patient_ordonnances')]
+    #[IsGranted('ROLE_PATIENT')]
+    public function listOrdonnances(OrdonnanceRepository $ordonnanceRepository): Response
     {
-        $patient = $patientRepository->find($id);
+        // Get the authenticated user
+        $patient = $this->getUser();
 
-        if (!$patient) {
+        // Ensure it's a patient
+        if (!$patient || !in_array('ROLE_PATIENT', $patient->getRoles(), true)) {
             throw $this->createNotFoundException('Patient not found');
         }
 
-        // Fetch Ordonnances WITHOUT pagination first
         $ordonnances = $ordonnanceRepository->findBy(['patient' => $patient]);
-
-        // Now apply pagination
-        $query = $ordonnanceRepository->createQueryBuilder('o')
-            ->where('o.patient = :patient')
-            ->setParameter('patient', $patient)
-            ->orderBy('o.datePrescription', 'DESC')
-            ->getQuery();
-
-        $ordonnancesPaginated = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            5
-        );
 
         return $this->render('user/home.html.twig', [
             'patient' => $patient,
-            'ordonnances' => $ordonnancesPaginated,
+            'ordonnances' => $ordonnances,
             'template' => 'template1',
         ]);
     }

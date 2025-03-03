@@ -36,7 +36,7 @@ class OrdonnanceType extends AbstractType
             
             ->add('patient', EntityType::class, [
                 'class' => Patient::class,
-                'choice_label' => 'name',
+                'choice_label' => 'nom',
                 'label' => 'Patient',
                 'attr' => ['class' => 'form-control'],
             ])

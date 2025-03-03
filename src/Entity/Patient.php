@@ -11,7 +11,8 @@ class Patient extends User
 
     public function getRoles(): array
     {
-        return ['ROLE_PATIENT'];
+        return array_unique(array_merge(parent::getRoles(), ['ROLE_PATIENT']));
     }
+    
     
 }

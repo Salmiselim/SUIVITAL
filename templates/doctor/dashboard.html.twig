@@ -8,11 +8,12 @@
         <div class="card-body">
             <h1 class="h4 text-success font-weight-bold text-center mb-4">Welcome, Dr. {{ user.nom }} {{ user.prenom }}!</h1>
             
-            {% if not user.isVerified %}
-                <div class="alert alert-warning text-center">
-                    Your account is not yet verified. Please wait for admin approval.
-                </div>
-            {% endif %}
+  {% if app.session.get('flash_warning') %}
+    <div class="alert alert-warning">
+        {{ app.session.get('flash_warning') }}
+    </div>
+{% endif %}
+
             
             <p class="text-center">This is your doctor dashboard.</p>
 
@@ -28,7 +29,9 @@
 
             <div class="d-flex justify-content-center mt-4">
                 <a href="#" class="btn btn-success btn-lg btn-block rounded-pill shadow-sm mx-2">My Appointments</a>
-                <a href="#" class="btn btn-primary btn-lg btn-block rounded-pill shadow-sm mx-2">Patient History</a>
+                <a href="#" class="btn btn-primary btn-lg btn-block rounded-pill shadow-sm mx-2">Patient History</a>.          
+<a href="{{ path('app_ordonnance_new', { 'template': 'template1' }) }}" class="btn btn-success">New Ordonnance</a>
+
             </div>
         </div>
     </div>

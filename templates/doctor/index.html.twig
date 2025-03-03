@@ -4,7 +4,6 @@
 
 {% block content %}
 
-
     <h1>Doctor index</h1>
 
     <table class="table">
@@ -14,8 +13,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Password</th>
-                <th>Specialization</th>
-                <th>LicenseNumber</th>
+                <th>Proof</th> <!-- Updated to match the new Doctor entity -->
+                <th>Verified</th> <!-- Updated to match the new Doctor entity -->
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,11 +22,11 @@
         {% for doctor in doctors %}
             <tr>
                 <td>{{ doctor.id }}</td>
-                <td>{{ doctor.name }}</td>
+                <td>{{ doctor.nom }} {{ doctor.prenom }}</td> <!-- Updated to use the correct fields from User entity -->
                 <td>{{ doctor.email }}</td>
                 <td>{{ doctor.password }}</td>
-                <td>{{ doctor.specialization }}</td>
-                <td>{{ doctor.licenseNumber }}</td>
+                <td>{{ doctor.proof }}</td> <!-- Updated to show the proof field -->
+                <td>{{ doctor.isVerified ? 'Yes' : 'No' }}</td> <!-- Display verified status -->
                 <td>
                     <a href="{{ path('app_doctor_show', {'id': doctor.id}) }}">show</a>
                     <a href="{{ path('app_doctor_edit', {'id': doctor.id}) }}">edit</a>

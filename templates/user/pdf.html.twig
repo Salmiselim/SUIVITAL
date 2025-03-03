@@ -104,15 +104,15 @@
 
         <!-- Header with Logo -->
         <div class="header">
-<img src="{{ asset('assets/SUIVITAL.png') }}" alt="l Logo">
+            <img src="{{ asset('assets/SUIVITAL.png') }}" alt="Suivital Logo">
             <h1>Ordonnance #{{ ordonnance.id }}</h1>
             <p>Date: <strong>{{ ordonnance.datePrescription|date('d/m/Y') }}</strong></p>
         </div>
 
         <!-- Patient & Doctor Info -->
         <div class="details">
-            <p><strong>Patient:</strong> {{ ordonnance.patient.getName() }}</p>
-            <p><strong>Doctor:</strong> {{ ordonnance.doctor.getName() }}</p>
+            <p><strong>Patient:</strong> {{ ordonnance.patient.nom }} {{ ordonnance.patient.prenom }}</p>
+            <p><strong>Doctor:</strong> Dr. {{ ordonnance.doctor.nom }}</p>
             <p><strong>Description:</strong> {{ ordonnance.description }}</p>
         </div>
 
@@ -146,7 +146,7 @@
         <!-- Signature -->
         <div class="signature">
             <p><strong>Doctor's Signature:</strong></p>
-            <img src="{{ asset('doctor_signature.png') }}" alt="Doctor Signature">
+            <img src="{{ asset('assets/doctor_signature.png') }}" alt="Doctor Signature">
         </div>
 
         <!-- Footer -->

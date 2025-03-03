@@ -1,19 +1,4 @@
 <?php
-namespace App\Entity;
-
-use App\Repository\PatientRepository;
-use Doctrine\ORM\Mapping as ORM;
-
-#[ORM\Entity(repositoryClass: PatientRepository::class)]
-class Patient extends User
-{
-    public function getRoles(): array
-    {
-        return ['ROLE_PATIENT'];
-    }
-}
-
-// src/Form/RegistrationFormType.php
 namespace App\Form;
 
 use App\Entity\User;

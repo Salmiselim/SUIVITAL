@@ -14,7 +14,7 @@ class MedicamentFixtures extends Fixture
 
         for ($i = 0; $i < 20; $i++) { 
             $medicament = new Medicament();
-            $medicament->setName($faker->name());
+            $medicament->setName($faker->word());
             $medicament->setDosage($faker->randomElement(['100mg', '250mg', '500mg', '1g'])); 
             $medicament->setDuration($faker->numberBetween(3, 14));
             $medicament->setFrequency($faker->randomElement(['Once a day', 'Twice a day', 'Three times a day']));

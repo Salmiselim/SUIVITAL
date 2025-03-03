@@ -1,60 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ patient.name }}'s Ordonnances{% endblock %}
+{% block title %}{{ patient.nom }}'s Ordonnances{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1> Salut Mr.{{ patient.name }}</h1>
+<div class="container">
+    <h1>Bonjour Mr. {{ patient.nom }} {{ patient.prenom }}</h1>
 
-        {% if ordonnances is empty %}
-            <p>pas d'odonances pour Mr.{{ patient.name }}</p>
-        {% else %}
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="card-title">Liste des Ordonnances</h3>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped table-bordered">
-                        <thead class="bg-light">
-                            <tr>
-                                <th>ID</th>
-                                <th>Date Prescription</th>
-                                <th>Description</th>
-                                <th>Medicaments</th>
-                                <th>Doctor</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for ordonnance in ordonnances %}
-                                <tr>
-                                    <td>{{ ordonnance.id }}</td>
-                                    <td>{{ ordonnance.datePrescription|date('Y-m-d H:i') }}</td>
-                                    <td>{{ ordonnance.description }}</td>
-                                    <td>
-                                        {% for medicament in ordonnance.medicaments %}
-                                            {{ medicament.name }}{% if not loop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                    <td>{{ ordonnance.doctor.name }}</td>
-                                    <td>
-                                        <a href="{{ path('app_ordonnance_show', {'id': ordonnance.id}) }}" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-eye"></i> Details
-                                        </a>
-                                       <a href="{{ path('ordonnance_download', {'id': ordonnance.id}) }}" class="btn btn-primary btn-sm">
-    <i class="fas fa-download"></i> 
-</a>
-
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+    {% if ordonnances is empty %}
+        <p>Aucune ordonnance trouvée.</p>
+    {% else %}
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title">Liste des Ordonnances</h3>
             </div>
-        {% endif %}
-        <div class="d-flex justify-content-center">
-            {{ knp_pagination_render(ordonnances) }}
+            <div class="card-body">
+                <table class="table table-striped table-bordered">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Date Prescription</th>
+                            <th>Description</th>
+                            <th>Médicaments</th>
+                            <th>Médecin</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ordonnance in ordonnances %}
+                            <tr>
+                                <td>{{ ordonnance.id }}</td>
+                                <td>{{ ordonnance.datePrescription|date('Y-m-d H:i') }}</td>
+                                <td>{{ ordonnance.description }}</td>
+                                <td>
+                                    {% for medicament in ordonnance.medicaments %}
+                                        {{ medicament.name }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ ordonnance.doctor.nom }}</td>
+                                <td>
+                                    <a href="{{ path('app_ordonnance_show', {'id': ordonnance.id}) }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i> Détails
+                                    </a>
+                                    <a href="{{ path('ordonnance_download', {'id': ordonnance.id}) }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-download"></i> Télécharger
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    {% endif %}
+</div>
 {% endblock %}

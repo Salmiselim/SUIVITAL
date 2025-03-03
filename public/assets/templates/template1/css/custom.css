@@ -1,0 +1,5 @@
+.scrollable-multiselect {
+    height: 150px; 
+    overflow-y: auto;
+    display: block;
+}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Medicament{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mb-4">Create Medicament</h1>
+
+        <div class="card p-4 shadow-sm">
+            {{ form_start(form, {'attr': {'class': 'form', 'novalidate': 'novalidate'}}) }}
+                <div class="form-group">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.name) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.dosage) }}
+                    {{ form_widget(form.dosage, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.dosage) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.duration) }}
+                    {{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.duration) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.frequency) }}
+                    {{ form_widget(form.frequency, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.frequency) }}
+                </div>
+                <div class="form-group">
+                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary mt-3'}}) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+
+        <a href="{{ path('app_medicament_index') }}" class="btn btn-link mt-3">Back to list</a>
+    </div>
+{% endblock %}

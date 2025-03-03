@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Doctor index{% endblock %}
+
+{% block content %}
+
+    <h1>Doctor index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Proof</th> <!-- Updated to match the new Doctor entity -->
+                <th>Verified</th> <!-- Updated to match the new Doctor entity -->
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doctor in doctors %}
+            <tr>
+                <td>{{ doctor.id }}</td>
+                <td>{{ doctor.nom }} {{ doctor.prenom }}</td> <!-- Updated to use the correct fields from User entity -->
+                <td>{{ doctor.email }}</td>
+                <td>{{ doctor.password }}</td>
+                <td>{{ doctor.proof }}</td> <!-- Updated to show the proof field -->
+                <td>{{ doctor.isVerified ? 'Yes' : 'No' }}</td> <!-- Display verified status -->
+                <td>
+                    <a href="{{ path('app_doctor_show', {'id': doctor.id}) }}">show</a>
+                    <a href="{{ path('app_doctor_edit', {'id': doctor.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_doctor_new') }}">Create new</a>
+{% endblock %}

@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/reponses')]
 final class ReponsesController extends AbstractController
@@ -73,6 +74,43 @@ final class ReponsesController extends AbstractController
             'form' => $form,
         ]);
     }
+
+      // Search Reponses
+#[Route('/search', name: 'app_reponses_search', methods: ['GET'])] 
+#[Route('/admin/search', name: 'app_admin_reponses_search', methods: ['GET'])] 
+public function search(ReponseRepository $reponseRepository, PaginatorInterface $paginator, Request $request): Response 
+{
+    $searchTerm = $request->query->get('searchTerm', '');
+    $page = $request->query->getInt('page', 1);
+
+    // Update the query to search both 'commentaire' and 'objet'
+    $queryBuilder = $reponseRepository->createQueryBuilder('r')
+        ->where('r.commentaire LIKE :searchTerm OR r.objet LIKE :searchTerm')  // Search both 'commentaire' and 'objet'
+        ->setParameter('searchTerm', '%'.$searchTerm.'%')
+        ->orderBy('r.id', 'DESC');
+
+    $pagination = $paginator->paginate(
+        $queryBuilder->getQuery(),
+        $page,
+        10
+    );
+
+    // Adjust the check for admin route
+    $isAdminRoute = str_contains($request->getPathInfo(), '/admin');
+
+    // If no results are found, we show a message on the same page
+    $noResults = $pagination->getTotalItemCount() === 0;
+
+    // Return the appropriate template based on whether it's an admin route or not
+    return $this->render($isAdminRoute ? 'admin/index.html.twig' : 'reponses/index.html.twig', [
+        'reponses' => $pagination,
+        'searchTerm' => $searchTerm,
+        'noResults' => $noResults,  // Passing the noResults flag to the template
+    ]);
+}
+
+
+
 
     // 📌 User Show Reponse
     #[Route('/{id}', name: 'app_reponses_show', methods: ['GET'])]

@@ -1,43 +1,37 @@
 <?php
 
+// src/Repository/ReponseRepository.php
+
 namespace App\Repository;
 
 use App\Entity\Reponse;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Reponse>
  */
 class ReponseRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Reponse::class);
+        $this->paginator = $paginator;
     }
 
-    //    /**
-    //     * @return Reponse[] Returns an array of Reponse objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function search($searchTerm, $page = 1, $limit = 10)
+    {
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->where('r.commentaire LIKE :searchTerm')  // Adjusted to use 'commentaire'
+            ->setParameter('searchTerm', '%'.$searchTerm.'%')
+            ->orderBy('r.id', 'DESC');
 
-    //    public function findOneBySomeField($value): ?Reponse
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $query = $queryBuilder->getQuery();
+
+        return $this->paginator->paginate($query, $page, $limit);
+    }
 }
+

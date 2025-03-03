@@ -16,7 +16,7 @@ class Reponse
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $userId = null;
+    private ?int $userId = 1;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;

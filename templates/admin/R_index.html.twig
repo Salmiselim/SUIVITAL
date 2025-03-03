@@ -14,6 +14,11 @@
         </div>
     </section>
 
+     <form method="get" action="{{ path('app_reclamations_search') }}" class="form-inline mb-4">
+            <input type="text" name="searchTerm" value="{{ app.request.query.get('searchTerm', '') }}" class="form-control mr-2" placeholder="Rechercher...">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+
     <section class="content mt-4"> 
         <div class="container-fluid">
             <div class="card shadow-sm">
@@ -47,9 +52,11 @@
                                     <a href="{{ path('app_admin_reclamations_edit', {'id': reclamation.id}) }}" class="btn btn-warning btn-sm mx-1">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <a href="{{ path('app_admin_reponses_new', {'id': reclamation.id}) }}" class="btn btn-danger btn-sm mx-1">
+                                    <a href="{{ path('app_admin_reponses_new', {id: reclamation.id}) }}" class="btn btn-danger btn-sm mx-1">
                                         <i class="fas fa-reply"></i> Répondre
                                     </a>
+                                    
+
                                 </td>
                             </tr>
                         {% else %}

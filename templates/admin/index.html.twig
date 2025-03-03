@@ -13,7 +13,12 @@
             </div>
         </div>
     </section>
-
+            <!-- Search Form -->
+    <form method="get" action="{{ path(app.request.get('_route') == 'app_admin_reponses_index' ? 'app_admin_reponses_search' : 'app_reponses_search') }}" class="form-inline mb-4">
+        <input type="text" name="searchTerm" value="{{ app.request.query.get('searchTerm', '') }}" class="form-control mr-2" placeholder="Rechercher...">
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+    
     <section class="content mt-4"> 
         <div class="container-fluid">
             

@@ -1,0 +1,3 @@
+easy_admin:
+    resource: '../../vendor/easycorp/easyadmin-bundle/src/Controller/'
+    type: annotation

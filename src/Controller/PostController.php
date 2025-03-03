@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Form\CommentType;
 use App\Repository\PostRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +16,21 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/post')]
 final class PostController extends AbstractController
 {
-    #[Route(name: 'app_post_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository): Response
+    #[Route('/', name: 'app_post_index', methods: ['GET'])]
+    public function index(PostRepository $postRepository, CommentRepository $commentRepository): Response
     {
+        // Récupérer tous les posts
+        $posts = $postRepository->findAll();
+    
+        // Récupérer les commentaires pour chaque post
+        $commentsByPost = [];
+        foreach ($posts as $post) {
+            $commentsByPost[$post->getId()] = $commentRepository->findBy(['post' => $post], ['created_at' => 'ASC']);
+        }
+    
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $posts,
+            'commentsByPost' => $commentsByPost, // Passer les commentaires à la vue
         ]);
     }
 
@@ -78,4 +90,5 @@ final class PostController extends AbstractController
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

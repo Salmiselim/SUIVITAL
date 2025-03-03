@@ -26,7 +26,7 @@
     <div class="main-content" id="panel">
         <!-- Navbar -->
         
-
+{% include 'partials/navbar.html.twig' %}
         <!-- Main Content -->
         <div class="container-fluid">
             {% block body %}{% endblock %}
@@ -41,4 +41,3 @@
     {% block js %}{% endblock %}
 </body>
 </html>
-

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; // Ajout de la bibliothèque de validation
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -18,12 +19,19 @@ class Post
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Title should not be blank.")]
+    #[Assert\Regex("/^[a-zA-Z\s]+$/", message: "Title can only contain letters and spaces.")]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: "Content should not be blank.")]
+    #[Assert\Length(min: 10, minMessage: "Content must be at least {{ limit }} characters long.")]
+    #[Assert\Regex("/^[a-zA-Z0-9\s]+$/", message: "Content can only contain letters, numbers, and spaces.")]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Author should not be blank.")]
+    #[Assert\Regex("/^[a-zA-Z\s]+$/", message: "Author name can only contain letters and spaces.")]
     private ?string $author = null;
 
     #[ORM\Column]

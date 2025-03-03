@@ -24,7 +24,7 @@ final class CommentController extends AbstractController
         ]);
     }
 
-    #[Route('/new/{postId}', name: 'app_comment_new', methods: ['GET', 'POST'])]
+   /* #[Route('/new/{postId}', name: 'app_comment_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository, int $postId): Response
     {
         $post = $postRepository->find($postId);
@@ -50,7 +50,35 @@ final class CommentController extends AbstractController
             'form' => $form,
             'post' => $post,
         ]);
+    }*/
+    #[Route('/new/{postId}', name: 'app_comment_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $entityManager, PostRepository $postRepository, int $postId): Response
+{
+    $post = $postRepository->find($postId);
+    if (!$post) {
+        throw $this->createNotFoundException('Post not found');
     }
+
+    $comment = new Comment();
+    $comment->setPost($post); // Associer le commentaire au post
+
+    $form = $this->createForm(CommentType::class, $comment);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        // Rediriger vers la page précédente (ou la liste des posts)
+        return $this->redirectToRoute('app_post_index');
+    }
+
+    return $this->render('comment/new.html.twig', [
+        'comment' => $comment,
+        'form' => $form,
+        'post' => $post,
+    ]);
+}
 
     #[Route('/{id}', name: 'app_comment_show', methods: ['GET'])]
     public function show(Comment $comment): Response
@@ -69,12 +97,13 @@ final class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_post_show', ['id' => $comment->getPost()->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('comment/edit.html.twig', [
             'comment' => $comment,
             'form' => $form,
+            'post' => $comment->getPost(),
         ]);
     }
 

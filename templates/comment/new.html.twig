@@ -3,9 +3,40 @@
 {% block title %}New Comment{% endblock %}
 
 {% block body %}
-    <h1>Create new Comment</h1>
+    <h1 style="text-align: center; margin-bottom: 30px;">Type your comment</h1>
 
-    {{ include('comment/_form.html.twig') }}
+    <div style="max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #ddd; border-radius: 25px; background-color: #f9f9f9;">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    {{ form_label(form.author, 'Author', {'label_attr': {'style': 'font-weight: bold; margin-bottom: 5px;'}}) }}
+                    {{ form_widget(form.author, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;'}}) }}
+                    {% for error in form.author.vars.errors %}
+                        <div style="color: red; font-size: 14px;">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
 
-    <a href="{{ path('app_comment_index') }}">back to list</a>
+                <div>
+                    {{ form_label(form.content, 'Content', {'label_attr': {'style': 'font-weight: bold; margin-bottom: 5px;'}}) }}
+                    {{ form_widget(form.content, {'attr': {'style': 'width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;'}}) }}
+                    {% for error in form.content.vars.errors %}
+                        <div style="color: red; font-size: 14px;">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" class="btn btn-primary" style="padding: 12px 25px; font-size: 16px; font-weight: bold;">{{ button_label|default('Publish') }}</button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{{ path('app_post_index') }}" class="btn btn-secondary" style="padding: 10px 20px; text-decoration: none; font-weight: bold;">Back to the forum</a>
+    </div>
 {% endblock %}

@@ -3,33 +3,140 @@
 {% block title %}Posts{% endblock %}
 
 {% block body %}
-    <h1 style="text-align: center;">SUIVITAL Forum</h1>
+    <div style="background-color: #f0f0f0; min-height: 100vh; padding: 20px;">
+        {# Titre et bouton "Add New Post" #}
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #333;">SUIVITAL Forum</h1>
+            <a href="{{ path('app_post_new') }}" class="btn btn-success" style="padding: 10px 20px; font-size: 16px;">Add New Post</a>
+        </div>
 
-    <div style="max-width: 800px; margin: 0 auto;">
-        {% for post in posts %}
-            <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 10px;">
-                <strong style="font-size: 1.3em;">{{ post.author }}</strong>
-                <br>
-                <small style="color: gray;">{{ post.getCreatedAt()|date('Y-m-d H:i') }}</small>
-                <p style="font-weight: bold; font-size: 1em; margin: 5px 0;">{{ post.title }}</p>
-                <p>{{ post.content }}</p>
-
-                <div style="display: flex; justify-content: space-between;">
-                    <div>
-                        <a href="{{ path('app_post_edit', {'id': post.id}) }}">Edit</a> | 
-                        <a href="{{ path('app_post_delete', {'id': post.id}) }}" onclick="return confirm('Are you sure?');">Delete</a>
+        {# Liste des posts #}
+        <div style="max-width: 900px; margin: 0 auto; position: relative;">
+            {% for post in posts %}
+                {# Carte pour chaque post #}
+                <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 10px; background-color: #fff;">
+                    {# Auteur et date du post #}
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <strong style="font-size: 1.2em; color: #555;">{{ post.author }}</strong>
+                        <small style="color: #888;">{{ post.getCreatedAt()|date('Y-m-d') }}</small>
                     </div>
-                    <div>
-                        <a href="{{ path('app_comment_new', {'postId': post.id}) }}" class="btn btn-primary">Comment</a>
+
+                    {# Titre et contenu du post #}
+                    <h2 style="font-size: 1.5em; color: #333; margin-bottom: 10px;">{{ post.title }}</h2>
+                    <p style="font-size: 1em; color: #444; line-height: 1.6;">{{ post.content }}</p>
+
+                    {# Boutons d'action pour le post #}
+                    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                        <div>
+                            <a href="{{ path('app_post_edit', {'id': post.id}) }}" style="color: #007bff; text-decoration: none;">Edit</a> | 
+                            <a href="{{ path('app_post_delete', {'id': post.id}) }}" style="color: #dc3545; text-decoration: none;" onclick="return confirm('Are you sure?');">Delete</a>
+                        </div>
+                        <div>
+                            <a href="{{ path('app_comment_new', {'postId': post.id}) }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Comment</a>
+                        </div>
+                    </div>
+
+                    {# Section des commentaires #}
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                        <h3 style="font-size: 1.3em; color: #555; margin-bottom: 15px;">Comments</h3>
+
+                        {% if commentsByPost[post.id] is empty %}
+                            <p style="color: #888; font-style: italic;">No Comments Yet.</p>
+                        {% else %}
+                            <ul style="list-style-type: none; padding: 0;">
+                                {# Afficher seulement les deux premiers commentaires #}
+                                {% for comment in commentsByPost[post.id]|slice(0, 2) %}
+                                    <li style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border: 1px solid #eee;">
+                                        {# Nom de l'auteur, boutons "Edit" et "Delete", et date #}
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                            <div>
+                                                <strong style="font-size: 1em; color: #333;">{{ comment.author }}</strong>
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                {# Boutons "Edit" et "Delete" #}
+                                                <a href="{{ path('app_comment_edit', {'id': comment.id}) }}" style="color: #666; text-decoration: none;">Edit</a>
+                                                <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" style="color: #666; text-decoration: none;" onclick="return confirm('Are you sure?');">Delete</a>
+                                                {# Date du commentaire #}
+                                                <small style="color: #888;">{{ comment.createdAt|date('Y-m-d') }}</small>
+                                            </div>
+                                        </div>
+
+                                        {# Contenu du commentaire #}
+                                        <p style="font-size: 0.9em; color: #444; margin: 0;">{{ comment.content }}</p>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            {# Afficher le bouton "See more..." s'il y a plus de 2 commentaires #}
+                            {% if commentsByPost[post.id]|length > 2 %}
+                                <button onclick="toggleComments({{ post.id }})" style="background: none; border: none; color: #007bff; cursor: pointer; padding: 0; font-size: 0.9em;">
+                                    See more...
+                                </button>
+
+                                {# Masquer les commentaires supplémentaires par défaut #}
+                                <ul id="comments-{{ post.id }}" style="list-style-type: none; padding: 0; display: none;">
+                                    {% for comment in commentsByPost[post.id]|slice(2) %}
+                                        <li style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border: 1px solid #eee;">
+                                            {# Nom de l'auteur, boutons "Edit" et "Delete", et date #}
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                                <div>
+                                                    <strong style="font-size: 1em; color: #333;">{{ comment.author }}</strong>
+                                                </div>
+                                                <div style="display: flex; align-items: center; gap: 10px;">
+                                                    {# Boutons "Edit" et "Delete" #}
+                                                    <a href="{{ path('app_comment_edit', {'id': comment.id}) }}" style="color: #666; text-decoration: none;">Edit</a>
+                                                    <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" style="color: #666; text-decoration: none;" onclick="return confirm('Are you sure?');">Delete</a>
+                                                    {# Date du commentaire #}
+                                                    <small style="color: #888;">{{ comment.createdAt|date('Y-m-d') }}</small>
+                                                </div>
+                                            </div>
+
+                                            {# Contenu du commentaire #}
+                                            <p style="font-size: 0.9em; color: #444; margin: 0;">{{ comment.content }}</p>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-        {% else %}
-            <p style="text-align: center;">No posts found.</p>
-        {% endfor %}
-
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="{{ path('app_post_new') }}" class="btn btn-success">Add New Post</a>
+            {% else %}
+                <p style="text-align: center; color: #888;">No posts found.</p>
+            {% endfor %}
         </div>
+
+        {# Bouton de retour en haut de page #}
+        <button id="scrollToTopBtn" style="display: none; position: fixed; bottom: 80px; right: 20px; background-color: #007bff; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 20px;">
+            ↑
+        </button>
     </div>
+
+    {# Script JavaScript pour le bouton de retour en haut de page #}
+    <script>
+        // Afficher/masquer le bouton de retour en haut de page
+        window.onscroll = function() {
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = 'block';
+            } else {
+                scrollToTopBtn.style.display = 'none';
+            }
+        };
+
+        // Fonction pour revenir en haut de la page
+        document.getElementById('scrollToTopBtn').onclick = function() {
+            document.body.scrollTop = 0; // Pour Safari
+            document.documentElement.scrollTop = 0; // Pour Chrome, Firefox, IE et Opera
+        };
+
+        // Fonction pour afficher/masquer les commentaires supplémentaires
+        function toggleComments(postId) {
+            const comments = document.getElementById(`comments-${postId}`);
+            if (comments.style.display === 'none') {
+                comments.style.display = 'block';
+            } else {
+                comments.style.display = 'none';
+            }
+        }
+    </script>
 {% endblock %}

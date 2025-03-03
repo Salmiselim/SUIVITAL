@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; // Ajout des contraintes de validation
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -15,6 +16,9 @@ class Comment
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Content should not be empty')] // Validation que le contenu n'est pas vide
+    #[Assert\Length(min: 10, minMessage: 'Content must be at least {{ limit }} characters long')] // Longueur minimale
+    #[Assert\Regex("/^[a-zA-Z0-9\s]+$/", message: "Content must not contain special characters")] // Pas de caractères spéciaux
     private ?string $content = null;
 
     #[ORM\Column]
@@ -23,7 +27,14 @@ class Comment
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable(); // Définit automatiquement la date de création
+    }
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Author should not be empty')] // Validation que l'auteur n'est pas vide
+    #[Assert\Regex("/^[a-zA-Z\s]+$/", message: "Author name must only contain letters")] // Pas de chiffres ou caractères spéciaux
     private ?string $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]

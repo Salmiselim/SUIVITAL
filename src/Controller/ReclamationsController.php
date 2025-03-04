@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\EmailService;  // Import the EmailService class
+
 
 #[Route('/reclamations')]
 final class ReclamationsController extends AbstractController
@@ -35,16 +37,21 @@ final class ReclamationsController extends AbstractController
 
     // User Create New Reclamation
     #[Route('/new', name: 'app_reclamations_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EmailService $emailService): Response
     {
         $reclamation = new Reclamation();
         $form = $this->createForm(ReclamationType::class, $reclamation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Persist the reclamation
             $entityManager->persist($reclamation);
             $entityManager->flush();
 
+            // Step 4: Trigger email to admin
+            $emailService->sendNewReclamationNotification($reclamation);  // Only notifying admin
+
+            // Redirect to the user reclamation index page after submission
             return $this->redirectToRoute('app_reclamations_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -56,16 +63,21 @@ final class ReclamationsController extends AbstractController
 
     // Admin Create New Reclamation
     #[Route('/admin/new', name: 'app_admin_reclamations_new', methods: ['GET', 'POST'])]
-    public function newAdmin(Request $request, EntityManagerInterface $entityManager): Response
+    public function newAdmin(Request $request, EntityManagerInterface $entityManager, EmailService $emailService): Response
     {
         $reclamation = new Reclamation();
         $form = $this->createForm(ReclamationType::class, $reclamation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Persist the reclamation
             $entityManager->persist($reclamation);
             $entityManager->flush();
 
+            // Trigger email to admin
+            $emailService->sendNewReclamationNotification($reclamation);  // Only notifying admin
+
+            // Redirect to the admin reclamation index page after submission
             return $this->redirectToRoute('app_admin_reclamations_index', [], Response::HTTP_SEE_OTHER);
         }
 

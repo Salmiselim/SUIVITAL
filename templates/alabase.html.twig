@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>{% block title %}Esprit Dashboard{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
+
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    
+    <!-- Argon CSS (Bootstrap 5 included) -->
+    <link rel="stylesheet" href="{{ asset('assets/templates/template1/css/argon-dashboard.css') }}">
+
+    {% block css %}{% endblock %}
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        {% include 'partials/alanav.html.twig' %}
+
+        <!-- Main Content -->
+       
+    <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="content">
+                <div class="container-fluid">
+                     {% block body %}{% endblock %}
+                </div>
+            </section>
+        </div>
+
+    <!-- Core JS Files -->
+    
+    <script src="{{ asset('assets/js/core/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/templates/template1/js/argon-dashboard.js') }}"></script>
+
+    {% block js %}{% endblock %}
+</body>
+</html>
+

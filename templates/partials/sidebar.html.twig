@@ -1,0 +1,54 @@
+{% if template == 'template1' %}
+
+{% else %}
+    {# Sidebar for AdminLTE #}
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <a href="{{ path('admin_dashboard') }}" class="brand-link">
+            <img src="{{ asset('assets/templates/template2/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">DASHBOARD</span>
+        </a>
+
+        <div class="sidebar">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{ asset('assets/templates/template2/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">Admin 1</a>
+                </div>
+            </div>
+
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+                    <li class="nav-item menu-open">
+                        <a href="/ordonnance" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            liste des ordenances
+                            </p>
+                        </a>
+                        <a href="/medicament" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            liste des medicaments   
+                            </p>
+                        </a>
+                         <a href="/users" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            liste des utilisateur   
+                            </p>
+                        </a>
+                        <a href="/reclamations/admin" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            liste des réclamations   
+                            </p>
+                        </a>
+                        <a href="/reponses/admin" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            liste des réponses   
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+{% endif %}

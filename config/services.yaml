@@ -3,8 +3,10 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
-parameters:
 
+# config/services.yaml
+parameters:
+    proof_directory: '%kernel.project_dir%/public/uploads/proofs'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -19,6 +21,11 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    # Explicitly define repositories as services
+    App\Repository\:
+        resource: '../src/Repository'
+        tags: ['doctrine.repository_service']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

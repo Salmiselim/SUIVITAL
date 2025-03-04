@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Creez votre compte{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4 border-0" style="max-width: 500px; width: 100%; border-radius: 12px;">
+        <div class="card-body">
+            <h1 class="h4 text-success font-weight-bold text-center mb-3">Créez votre compte</h1>
+
+            {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            {# Email Field #}
+            <div class="form-group">
+                {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'font-weight-bold text-success'}}) }}
+                {{ form_widget(registrationForm.email, {
+                    'attr': {
+                        'class': 'form-control rounded-pill shadow-sm',
+                        'placeholder': 'exemple@exemple.com',
+                        'pattern': '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}',
+                        'title': 'Veuillez entrer une adresse email valide, par exemple : exemple@exemple.com.'
+                    }
+                }) }}
+                {{ form_errors(registrationForm.email, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+            {# Nom Field #}
+            <div class="form-group">
+                {{ form_label(registrationForm.nom, null, {'label_attr': {'class': 'font-weight-bold text-success'}}) }}
+                {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control rounded-pill shadow-sm'}}) }}
+                {{ form_errors(registrationForm.nom, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+            {# Prenom Field #}
+            <div class="form-group">
+                {{ form_label(registrationForm.prenom, null, {'label_attr': {'class': 'font-weight-bold text-success'}}) }}
+                {{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control rounded-pill shadow-sm'}}) }}
+                {{ form_errors(registrationForm.prenom, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+            {# Password Field #}
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword, null, {'label_attr': {'class': 'font-weight-bold text-success'}}) }}
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control rounded-pill shadow-sm'}}) }}
+                {{ form_errors(registrationForm.plainPassword, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+            {# Role Field #}
+            <div class="form-group">
+                {{ form_label(registrationForm.role, null, {'label_attr': {'class': 'font-weight-bold text-success'}}) }}
+                {{ form_widget(registrationForm.role, {'attr': {'class': 'form-control rounded-pill shadow-sm'}}) }}
+                {{ form_errors(registrationForm.role, {'attr': {'class': 'text-danger'}}) }}
+            </div>
+
+
+            {# Proof Field (for Doctors) #}
+            <div class="form-group" id="proof-field">
+                {{ form_label(registrationForm.proof, null, {'label_attr': {'class': 'font-weight-bold text-success'}}) }}
+                {{ form_widget(registrationForm.proof, {'attr': {'class': 'form-control-file'}}) }}
+                {{ form_errors(registrationForm.proof, {'attr': {'class': 'text-danger'}}) }}
+                <small class="form-text text-muted">
+                    Téléchargez un fichier PDF, JPEG ou PNG valide (max 1MB).
+                </small>
+            </div>
+
+            {# Submit Button #}
+            <button type="submit" class="btn btn-success btn-lg btn-block mt-3 rounded-pill shadow-sm">
+                Créer mon compte
+            </button>
+
+            {{ form_end(registrationForm) }}
+
+            <div class="text-center mt-4">
+                <p class="text-muted">Vous avez déjà un compte? <a href="{{ path('app_login') }}" class="text-success">Se connecter</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Optional: Add JavaScript to show/hide the proof field based on role selection #}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleField = document.querySelector('#{{ registrationForm.role.vars.id }}');
+        const proofField = document.getElementById('proof-field');
+
+        function toggleProofField() {
+            if (roleField.value === 'ROLE_DOCTOR') {
+                proofField.style.display = 'block';
+            } else {
+                proofField.style.display = 'none';
+            }
+        }
+
+        roleField.addEventListener('change', toggleProofField);
+        toggleProofField(); // Initial check
+    });
+   document.addEventListener("DOMContentLoaded", function() {
+    const roleSelector = document.getElementById("role-selector");
+    const dateOfBirthField = document.getElementById("date-of-birth-field");
+    const proofField = document.getElementById("proof-field");
+
+    function toggleFields() {
+        const selectedRole = roleSelector.value;
+        if (selectedRole === "ROLE_PATIENT") {
+            dateOfBirthField.style.display = "block";
+            proofField.style.display = "none";
+        } else if (selectedRole === "ROLE_DOCTOR") {
+            dateOfBirthField.style.display = "none";
+            proofField.style.display = "block";
+        } else {
+            dateOfBirthField.style.display = "none";
+            proofField.style.display = "none";
+        }
+    }
+
+    roleSelector.addEventListener("change", toggleFields);
+    toggleFields(); // Run on page load
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% block form %}
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Créer une Réclamation</h5>
+    </div>
+    <div class="card-body">
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(form.objet, 'Objet', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.objet, {
+                'attr': {
+                    'class': 'form-control' ~ (form.objet.vars.errors|length > 0 ? ' is-invalid' : ''),
+                    'placeholder': 'Objet de la réclamation'
+                }
+            }) }}
+            {% if form.objet.vars.errors|length > 0 %}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.objet) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.commentaire, 'Commentaire', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.commentaire, {
+                'attr': {
+                    'class': 'form-control' ~ (form.commentaire.vars.errors|length > 0 ? ' is-invalid' : ''),
+                    'rows': '4',
+                    'placeholder': 'Décrivez votre réclamation'
+                }
+            }) }}
+            {% if form.commentaire.vars.errors|length > 0 %}
+                <div class="invalid-feedback">
+                    {{ form_errors(form.commentaire) }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.date, 'Date', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.date, {
+                'attr': {
+                    'class': 'form-control',
+                    'readonly': true
+                }
+            }) }}
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save"></i> Enregistrer
+            </button>
+            <a href="{{ path('app_admin_reclamations_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

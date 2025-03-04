@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %} 
+<div class="container mt-4">
+    <h1 class="mb-4 text-success">Admin Dashboard</h1>
+
+    <!-- Search Form -->
+    <form method="get" action="{{ path('app_admin_dashboard') }}" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 position-relative">
+                <input type="text" name="search" class="form-control" placeholder="Search users..." value="{{ app.request.query.get('search') }}" autocomplete="off">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary">Reset</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Users Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.nom }} {{ user.prenom }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.roles|join(', ') }}</td>
+                        <td>
+                    {% if 'ROLE_DOCTOR' in user.roles and user is defined and user.isVerified is defined and not user.isVerified %}
+    <a href="{{ path('app_admin_verify', {'id': user.id}) }}" class="btn btn-warning btn-sm">Verify</a>
+{% endif %}
+
+                            <a href="{{ path('app_admin_delete', {'id': user.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No users found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

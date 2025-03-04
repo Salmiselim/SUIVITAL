@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Bienvenue sur le tableau de bord administrateur</h1>
+
+        <div class="row justify-content-between">
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-info p-4">
+                    <div class="inner">
+                        <h3>{{ med|default(0) }}</h3>
+                        <p>Nombre des médicaments</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-gradient-success p-4">
+                    <div class="inner">
+                        <h3>{{ usr|default(0) }}</h3>
+                        <p>Nombre des utilisateurs</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-gradient-warning p-4">
+                    <div class="inner">
+                        <h3>{{ ord|default(0) }}</h3>
+                        <p>Nombre des ordonnances</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-medical"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-4">
+                <div class="small-box bg-gradient-danger p-4">
+                    <div class="inner">
+                        <h3>{{ rdv|default(0) }}</h3>
+                        <p>Total des rendez-vous</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Better & Smaller Statistics Chart -->
+        <div class="row">
+            <div class="col-md-4 offset-md-4 text-center">
+                <h5>Répartition des Utilisateurs</h5>
+                <canvas id="userChart" style="max-height: 450px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        new Chart(document.getElementById('userChart'), {
+            type: 'doughnut', 
+            data: {
+                labels: ['Doctors', 'Patients'],
+                datasets: [{
+                    data: [{{ doctorCount|default(0) }}, {{ patientCount|default(0) }}],
+                    backgroundColor: ['#36A2EB', '#FF6384'],
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%', 
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+
+
+{% endblock %}

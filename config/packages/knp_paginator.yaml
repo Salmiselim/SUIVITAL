@@ -1,22 +1,11 @@
-<<<<<<< HEAD
-# config/packages/knp_paginator.yaml
 knp_paginator:
     page_range: 5
     default_options:
         page_name: page
         sort_field_name: sort
         sort_direction_name: direction
-        distinct: true
+        distinct: true  # Kept from your version
     template:
-        pagination: '@KnpPaginator/Pagination/sliding.html.twig'
-        sortable: '@KnpPaginator/Pagination/sortable_link.html.twig'
-=======
-knp_paginator:
-    page_range: 5        
-    default_options:
-        page_name: page  
-        sort_field_name: sort
-        sort_direction_name: direction
-    template:
-        pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig' 
->>>>>>> bb9e0a621a23b9b2737377207fb1c79dfd141d1f
+        pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig' # Your friend's version
+        # sliding_pagination: '@KnpPaginator/Pagination/sliding.html.twig' # Your version (optional if you want both)
+        sortable: '@KnpPaginator/Pagination/sortable_link.html.twig' # Kept from your version

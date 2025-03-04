@@ -50,8 +50,7 @@ public function index(
 
     $query = $queryBuilder->getQuery();
     $ordonnances = $paginator->paginate($query, $request->query->getInt('page', 1), 5);
-    // Debugging: Check if ordonnances are being fetched
-    dump($ordonnances);
+    
 
     return $this->render('ordonnance/index.html.twig', [
         'ordonnances' => $ordonnances,

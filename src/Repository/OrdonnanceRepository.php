@@ -40,4 +40,33 @@ class OrdonnanceRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findLatest(int $limit = 5)
+    {
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getMostPrescribedMedications(int $limit = 5)
+    {
+        return $this->createQueryBuilder('o')
+            ->select('m.name, COUNT(o.id) as prescriptionCount')
+            ->join('o.medicaments', 'm')
+            ->groupBy('m.id')
+            ->orderBy('prescriptionCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getPrescriptionCompletionStats()
+    {
+        return $this->createQueryBuilder('o')
+            ->select('o.status, COUNT(o.id) as count')
+            ->groupBy('o.status')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -1,0 +1,37 @@
+<div class="container">
+{{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+
+<div class="form-group">
+    {{ form_label(form.nom, "Service")  }}
+    {{ form_widget(form.nom,({'class':'form-control'})) }}
+    {% if form_errors(form.nom) is not empty %}
+    <div class="alert alert-danger"
+    {{ form_errors(form.nom) }}
+    </div>
+    {% endif %}
+</div>
+<div class="form-group">
+    {{ form_label(form.specialite, "Specialité")  }}
+    {{ form_widget(form.specialite,({'class':'form-control'})) }}
+    {% if form_errors(form.specialite) is not empty %}
+    <div class="alert alert-danger"
+    {{ form_errors(form.specialite) }}
+    </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.tarif, "Tarif")  }}
+    {{ form_widget(form.tarif,({'class':'form-control'})) }}
+    {% if form_errors(form.tarif) is not empty %}
+    <div class="alert alert-danger"
+    {{ form_errors(form.tarif) }}
+    </div>
+    {% endif %}
+</div>
+
+
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+</div>

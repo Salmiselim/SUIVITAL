@@ -14,46 +14,60 @@ class RendezVous
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rendezVouses')]
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: 'rendezVouses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Patient $patientId = null;
+    private ?Patient $patient = null;
 
-    #[ORM\ManyToOne(inversedBy: 'rendezVouses')]
+    #[ORM\ManyToOne(targetEntity: Doctor::class, inversedBy: 'rendezVouses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Doctor $DoctorId = null;
+    private ?Doctor $doctor = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'rendezvouses')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Service $service = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateRendezVous = null;
 
     #[ORM\Column(length: 255)]
     private ?string $statut = null;
 
+    // Getters and setters
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPatientId(): ?Patient
+    public function getPatient(): ?Patient
     {
-        return $this->patientId;
+        return $this->patient;
     }
 
-    public function setPatientId(?Patient $patientId): static
+    public function setPatient(?Patient $patient): static
     {
-        $this->patientId = $patientId;
-
+        $this->patient = $patient;
         return $this;
     }
 
-    public function getDoctorId(): ?Doctor
+    public function getDoctor(): ?Doctor
     {
-        return $this->DoctorId;
+        return $this->doctor;
     }
 
-    public function setDoctorId(?Doctor $DoctorId): static
+    public function setDoctor(?Doctor $doctor): static
     {
-        $this->DoctorId = $DoctorId;
+        $this->doctor = $doctor;
+        return $this;
+    }
 
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): static
+    {
+        $this->service = $service;
         return $this;
     }
 
@@ -65,7 +79,6 @@ class RendezVous
     public function setDateRendezVous(\DateTimeInterface $dateRendezVous): static
     {
         $this->dateRendezVous = $dateRendezVous;
-
         return $this;
     }
 
@@ -77,7 +90,6 @@ class RendezVous
     public function setStatut(string $statut): static
     {
         $this->statut = $statut;
-
         return $this;
     }
 }

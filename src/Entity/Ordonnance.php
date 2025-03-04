@@ -15,7 +15,7 @@ class Ordonnance
 {
 
 
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -43,8 +43,8 @@ class Ordonnance
     public function __construct()
     {
         $this->medicaments = new ArrayCollection();
-        $this->datePrescription = new \DateTime(); 
-        }
+        $this->datePrescription = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -59,7 +59,7 @@ class Ordonnance
     public function setDatePrescription(\DateTimeInterface $datePrescription): static
     {
         $this->datePrescription = $datePrescription;
-       
+
 
         return $this;
     }

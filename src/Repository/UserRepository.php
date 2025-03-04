@@ -40,4 +40,57 @@ class UserRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findLatestPatients(int $limit = 5)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u INSTANCE OF App\Entity\Patient')
+            ->orderBy('u.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getPatientAgeDistribution()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('
+                CASE
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURRENT_DATE()) BETWEEN 0 AND 18 THEN 0
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURRENT_DATE()) BETWEEN 19 AND 30 THEN 19
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURRENT_DATE()) BETWEEN 31 AND 45 THEN 31
+                    WHEN TIMESTAMPDIFF(YEAR, u.birthdate, CURRENT_DATE()) BETWEEN 46 AND 65 THEN 46
+                    ELSE 66
+                END as ageRange,
+                COUNT(u.id) as count')
+            ->where('u INSTANCE OF App\Entity\Patient')
+            ->groupBy('ageRange')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getRegistrationTrend(int $days = 30)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('DATE(u.createdAt) as date, COUNT(u.id) as count')
+            ->where('u.createdAt >= :startDate')
+            ->setParameter('startDate', new \DateTime("-{$days} days"))
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findTopDoctorsByAppointments(int $limit = 5)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.id, u.firstName, u.lastName, COUNT(r.id) as appointmentCount')
+            ->join('u.appointments', 'r')
+            ->where('u INSTANCE OF App\Entity\Doctor')
+            ->groupBy('u.id')
+            ->orderBy('appointmentCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

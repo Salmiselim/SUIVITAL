@@ -40,4 +40,25 @@ class RendezVousRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findUpcomingAppointments(int $limit = 5)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.date >= :now')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('r.date', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getWeeklyAppointmentsTrend()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('DAYOFWEEK(r.date) as dayOfWeek, COUNT(r.id) as count')
+            ->where('r.date >= :startDate')
+            ->setParameter('startDate', new \DateTime('-7 days'))
+            ->groupBy('dayOfWeek')
+            ->getQuery()
+            ->getResult();
+    }
 }

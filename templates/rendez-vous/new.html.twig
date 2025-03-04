@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %} {% block title %}Create New Appointment{%
+endblock %} {% block body %}
+<div class="container py-5">
+  <a href="{{ path('app_rendezvous_index') }}" class="btn btn-secondary mb-4"
+    >⬅️ Back to Appointment List</a
+  >
+  <h1 class="text-center mb-5">📅 Create New Appointment</h1>
+
+  <div class="card shadow-lg">
+    <div class="card-body">
+      <h3 class="text-center mb-4">📝 Appointment Details</h3>
+
+      {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+
+      <div class="mb-3">
+        {{ form_label(form.appointmentDate, "Appointment Date and Time") }}
+        {{ form_widget(form.appointmentDate, {'attr': {'class': 'form-control', 'placeholder': 'Select a date and time'
+        }}) }}
+        <div class="invalid-feedback">
+          Please provide a valid date and time.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        {{ form_label(form.doctorId, "Doctor") }}
+        {{ form_widget(form.doctorId, {'attr': {'class': 'form-control'}}) }}
+      </div>
+
+      <div class="mb-3">
+        {{ form_label(form.patientId, "Patient") }}
+        {{ form_widget(form.patientId, {'attr': {'class': 'form-control'}}) }}
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success btn-lg px-5 py-2">
+          Create Appointment
+        </button>
+      </div>
+
+      {{ form_end(form) }}
+    </div>
+  </div>
+</div>
+{% endblock %}

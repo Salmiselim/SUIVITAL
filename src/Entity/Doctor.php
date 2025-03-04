@@ -36,7 +36,7 @@ class Doctor extends User
         $this->rendezVouses = new ArrayCollection();
     }
 
-    
+
     public function getSpecialization(): ?string
     {
         return $this->specialization;

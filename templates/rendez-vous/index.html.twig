@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %} {% block title %}Rendez-vous - Dashboard{%
+endblock %} {% block content %}
+<div class="container py-5">
+  <!-- Back Button -->
+  <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary mb-4">
+    ⬅️ Retour
+  </a>
+
+  <!-- Page Title -->
+  <h1 class="text-center mb-5">📅 Liste des Rendez-vous</h1>
+
+  <!-- New Rendez-vous Form Card -->
+  <div class="card shadow-lg mb-5">
+    <div class="card-body">
+      <h3 class="text-center mb-4 text-success">
+        ➕ Ajouter un nouveau Rendez-vous
+      </h3>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+          <div class="mb-3">
+            {{ form_label(form.patient, "Patient") }}
+            {{ form_widget(form.patient, {'attr': {'class': 'form-control'}}) }}
+          </div>
+          <div class="mb-3">
+            {{ form_label(form.doctor, "Médecin") }}
+            {{ form_widget(form.doctor, {'attr': {'class': 'form-control'}}) }}
+          </div>
+          <div class="mb-3">
+            {{ form_label(form.dateRendezVous, "Date de Rendez-vous") }}
+            {{ form_widget(form.dateRendezVous, {'attr': {'class': 'form-control'
+            }}) }}
+          </div>
+          <div class="mb-3">
+            {{ form_label(form.service, "Service") }}
+            {{ form_widget(form.service, {'attr': {'class': 'form-control'}}) }}
+          </div>
+          <div class="mb-3">
+            {{ form_label(form.statut, "Statut") }}
+            {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg px-4 py-2">
+              Créer
+            </button>
+          </div>
+          {{ form_end(form) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rendez-vous List Card -->
+  <div class="card shadow-lg">
+    <div class="card-body">
+      <h3 class="text-center mb-4">📋 Liste des Rendez-vous</h3>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>Patient</th>
+              <th>Médecin</th>
+              <th>Date</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rendezvous in rendezvous %}
+            <tr>
+              <td>{{ rendezvous.patient.name }}</td>
+              <td>{{ rendezvous.doctor.name }}</td>
+              <td>{{ rendezvous.dateRendezVous|date('d/m/Y H:i') }}</td>
+              <td>{{ rendezvous.statut }}</td>
+              <td class="text-center">
+                <!-- Edit Button -->
+                <a
+                  href="{{
+                    path('app_rendezvous_edit', { id: rendezvous.id })
+                  }}"
+                  class="btn btn-warning btn-sm me-2"
+                  title="Modifier Rendez-vous">
+                  ✏️ Modifier
+                </a>
+                <!-- Delete Form -->
+                <form
+                  action="{{
+                    path('app_rendezvous_delete', { id: rendezvous.id })
+                  }}"
+                  method="post"
+                  style="display: inline">
+                  <input
+                    type="hidden"
+                    name="_token"
+                    value="{{ csrf_token('delete' ~ rendezvous.id) }}" />
+                  <button
+                    class="btn btn-danger btn-sm"
+                    type="submit"
+                    onclick="return confirm('Êtes-vous sûr ?')"
+                    title="Supprimer Rendez-vous">
+                    🗑️ Supprimer
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5" class="text-center text-muted">
+                Aucun rendez-vous trouvé.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

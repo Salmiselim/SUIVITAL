@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %} {% block title %}Search Medication{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Search Medication Information</h1>
+
+  <form method="GET" action="{{ path('medication_search') }}" class="mb-4">
+    <div class="input-group">
+      <input
+        type="text"
+        name="medication"
+        class="form-control"
+        placeholder="Enter medication name"
+        required />
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </form>
+
+  {% if medicationInfo %}
+  <div class="list-group">
+    {% for item in medicationInfo %}
+    <div class="list-group-item">
+      <h5 class="card-title">
+        {{ item.openfda.brand_name[0] ?? "Unknown Brand" }}
+      </h5>
+      <p>
+        <strong>Manufacturer:</strong>
+        {{ item.openfda.manufacturer_name[0] ?? "Not available" }}
+      </p>
+      <p><strong>Purpose:</strong> {{ item.purpose[0] ?? "Not available" }}</p>
+      <p>
+        <strong>Warnings:</strong>
+        {{ item.warnings[0] ?? "No warnings available" }}
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+  {% elseif app.request.query.get('medication') is not empty %}
+  <div class="alert alert-warning">
+    No results found for "{{ app.request.query.get("medication") }}"
+  </div>
+  {% endif %}
+
+  <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary mt-4"
+    >Go Back</a
+  >
+</div>
+{% endblock %}

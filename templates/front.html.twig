@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="../assets/img/apple-icon.png" />
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
+    <title>{% block title %} Dashboard - Mon Produit {% endblock %}</title>
+
+    {% block stylesheets %}
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
+      rel="stylesheet" />
+    <link
+      href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css"
+      rel="stylesheet" />
+    <link
+      href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css"
+      rel="stylesheet" />
+    <script
+      src="https://kit.fontawesome.com/42d5adcbca.js"
+      crossorigin="anonymous"></script>
+    <link
+      id="pagestyle"
+      href="../assets/css/argon-dashboard.css?v=2.1.0"
+      rel="stylesheet" />
+    {% endblock %}
+    <style>
+      /* Centrer le texte */
+      .main-content {
+        text-align: center;
+        padding: 2rem;
+      }
+      .container-fluid {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Navbar -->
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+      <div class="container-fluid">
+        <!-- Navbar Brand (Titre du produit) -->
+        <a class="navbar-brand" href="#">
+          <img
+            src="../assets/img/logo.png"
+            alt="Logo"
+            class="navbar-brand-img"
+            height="40" />
+          <span class="ms-2">Mon Produit</span>
+        </a>
+
+        <!-- Toggler button pour la version mobile -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_service_indexfront') }}"
+                >Services</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_rendezvous_indexfront') }}"
+                >Rendezvous</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile">Profile</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    {#
+    <main class="main-content position-relative border-radius-lg">
+      <!-- Content -->
+      <div class="container-fluid py-4">
+        <h2>Bienvenue sur Mon Produit</h2>
+        <p>
+          Ceci est la page d'accueil. Vous pouvez naviguer entre les différentes
+          sections grâce à la barre de navigation ci-dessus.
+        </p>
+      </div>
+    </main>
+    #}
+
+    <!-- Scripts nécessaires pour Bootstrap (optional, si vous utilisez Bootstrap JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+  </body>
+  {% block body %} {% endblock %}
+</html>

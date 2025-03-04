@@ -73,7 +73,7 @@ final class DoctorController extends AbstractController
     #[Route('/{id}', name: 'app_doctor_delete', methods: ['POST'])]
     public function delete(Request $request, Doctor $doctor, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$doctor->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $doctor->getId(), $request->request->get('_token'))) {
             $entityManager->remove($doctor);
             $entityManager->flush();
         }
@@ -85,20 +85,17 @@ final class DoctorController extends AbstractController
     public function home(DoctorRepository $doctorRepository, int $id, RequestStack $requestStack): Response
     {
         $doctor = $doctorRepository->find($id);
-    
+
         if (!$doctor) {
             throw $this->createNotFoundException('Doctor not found');
         }
 
         $session = $requestStack->getSession();
         $session->set('doctorId', $id);
-    
+
         return $this->render('doctor/home.html.twig', [
             'doctor_name' => $doctor->getName(),
             'template' => 'template1',
         ]);
     }
-    
-    
-
 }

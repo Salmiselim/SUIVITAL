@@ -1,0 +1,91 @@
+{% extends 'front.html.twig' %} {% block title %}Service index{% endblock %} {%
+block body %}
+<h1>Service index</h1>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-4">
+      <div class="card-header pb-0">
+        <h6>Services Table</h6>
+      </div>
+      <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                  Id
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                  Nom
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                  Spécialité
+                </th>
+                <th
+                  class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                  Tarif
+                </th>
+                <th class="text-secondary opacity-7">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for service in services %}
+              <tr>
+                <td>
+                  <p class="text-xs font-weight-bold mb-0">{{ service.id }}</p>
+                </td>
+                <td>
+                  <p class="text-xs font-weight-bold mb-0">{{ service.nom }}</p>
+                </td>
+                <td>
+                  <p class="text-xs text-secondary mb-0">
+                    {{ service.specialite }}
+                  </p>
+                </td>
+                <td class="align-middle text-center">
+                  <span class="text-secondary text-xs font-weight-bold"
+                    >{{ service.tarif }} dt</span
+                  >
+                </td>
+                <td class="align-middle">
+                  <a
+                    href="{{ path('app_service_show', { id: service.id }) }}"
+                    class="text-secondary font-weight-bold text-xs"
+                    data-toggle="tooltip"
+                    data-original-title="View details"
+                    >Show</a
+                  >
+                  &nbsp;|&nbsp;
+                  <a
+                    href="{{ path('app_service_edit', { id: service.id }) }}"
+                    class="text-secondary font-weight-bold text-xs"
+                    data-toggle="tooltip"
+                    data-original-title="Edit details"
+                    >Edit</a
+                  >
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td
+                  colspan="5"
+                  class="text-center text-secondary text-xs font-weight-bold">
+                  No records found
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="{{ path('app_service_new') }}" class="btn">
+  <i class="fas fa-plus"></i> Create new
+</a>
+{# <a href="{{ path('app_service_new') }}">Create new</a> #} {% endblock %}

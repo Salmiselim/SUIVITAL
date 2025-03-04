@@ -10,11 +10,15 @@ use App\Repository\OrdonnanceRepository;
 use App\Repository\MedicamentRepository;
 use App\Repository\RendezVousRepository;
 
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
+
 final class AdminController extends AbstractController
 {
     #[Route('/dashboard', name: 'admin_dashboard')]
-    public function dashboard(UserRepository $userRepo, OrdonnanceRepository $ord, MedicamentRepository $med, RendezVousRepository $rdv): Response
+    public function dashboard(HttpFoundationRequest $request, UserRepository $userRepo, OrdonnanceRepository $ord, MedicamentRepository $med, RendezVousRepository $rdv): Response
     {
+        $search = $request->query->get('search');
+
         $doctorCount = $userRepo->createQueryBuilder('u')
             ->select('count(u.id)')
             ->where('u INSTANCE OF App\Entity\Doctor')
@@ -26,6 +30,24 @@ final class AdminController extends AbstractController
             ->where('u INSTANCE OF App\Entity\Patient')
             ->getQuery()
             ->getSingleScalarResult();
+
+        if ($search) {
+            $doctorCount = $userRepo->createQueryBuilder('u')
+                ->select('count(u.id)')
+                ->where('u INSTANCE OF App\Entity\Doctor')
+                ->andWhere('u.name LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->getQuery()
+                ->getSingleScalarResult();
+
+            $patientCount = $userRepo->createQueryBuilder('u')
+                ->select('count(u.id)')
+                ->where('u INSTANCE OF App\Entity\Patient')
+                ->andWhere('u.name LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
 
         return $this->render('admin/dashboard.html.twig', [
             'doctorCount' => $doctorCount,

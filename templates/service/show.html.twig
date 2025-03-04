@@ -1,0 +1,45 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Service{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h5 class="mb-0">Service Details</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th class="bg-light text-dark">Id</th>
+                        <td>{{ service.id }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light text-dark">Nom</th>
+                        <td>{{ service.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light text-dark">Spécialité</th>
+                        <td>{{ service.specialite }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bg-light text-dark">Tarif</th>
+                        <td>{{ service.tarif }} dt</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-3 text-center">
+                <a href="{{ path('app_service_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+                <a href="{{ path('app_service_edit', {'id': service.id}) }}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                {{ include('service/_delete_form.html.twig', { 'button_class': 'btn btn-danger' }) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

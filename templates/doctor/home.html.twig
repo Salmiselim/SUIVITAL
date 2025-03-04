@@ -3,70 +3,32 @@
 {% block title %}Tableau de bord - Docteur{% endblock %}
 
 {% block content %}
-<div class="header bg-gradient-success py-7 py-lg-8">
-    <div class="container">
-        <div class="header-body text-center mb-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 col-md-10">
-                    <h1 class="text-white">Bonjour, Dr. {{ doctor_name }} 👨‍⚕️</h1>
-                    <p class="text-white mt-3">
-                        Bienvenue sur votre tableau de bord Suivital ! Ici, vous pouvez gérer vos patients, ordonnances et rendez-vous facilement.
-                    </p>
+    {% if not isVerified %}
+        <div class="alert alert-warning text-center">
+            ⚠️ Votre compte n'est pas encore vérifié.
+        </div>
+    {% endif %}
+
+    <div class="header bg-gradient-success py-7 py-lg-8">
+        <div class="container">
+            <div class="header-body text-center mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-10">
+                        <h1 class="text-white">Bonjour, Dr. {{ doctor_name }} 👨‍⚕️</h1>
+                        <p class="text-white mt-3">
+                            Bienvenue sur votre tableau de bord Suivital ! Ici, vous pouvez gérer vos patients, ordonnances et rendez-vous facilement.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle mb-4">
-                        <i class="ni ni-single-02"></i>
-                    </div>
-                    <h5 class="h3">🩺 Mes Patients</h5>
-                    <p>Consultez et gérez la liste de vos patients.</p>
-                    <a href="#" class="btn btn-success">Voir les patients</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle mb-4">
-                        <i class="ni ni-paper-diploma"></i>
-                    </div>
-                    <h5 class="h3">📄 Ordonnances</h5>
-                    <p>Créez, mettez à jour et consultez vos ordonnances.</p>
-                    <a href="#" class="btn btn-success">Gérer les ordonnances</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle mb-4">
-                        <i class="ni ni-calendar-grid-58"></i>
-                    </div>
-                    <h5 class="h3">📅 Rendez-vous</h5>
-                    <p>Planifiez et consultez les rendez-vous médicaux.</p>
-                    <a href="#" class="btn btn-success">Voir les rendez-vous</a>
-                </div>
-            </div>
-        </div>
+    <div class="container text-center mt-5">
+        <h2 class="mb-4">Prêt à prendre soin de vos patients ?</h2>
+        <a href="{{ path('app_ordonnance_new', {'template': 'template1'}) }}" class="btn btn-success btn-lg">
+            Créer une ordonnance <i class="ni ni-fat-add ml-2"></i>
+        </a>
     </div>
-</div>
-
-<div class="container text-center mt-5">
-    <h2 class="mb-4">Prêt à prendre soin de vos patients ?</h2>
-   <a href="{{ path('app_ordonnance_new', {'template': 'template1'}) }}" class="btn btn-success btn-lg">
-    Créer une ordonnance <i class="ni ni-fat-add ml-2"></i>
-</a>
-
-</div>
 
 {% endblock %}

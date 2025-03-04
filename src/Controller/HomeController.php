@@ -16,4 +16,5 @@ final class HomeController extends AbstractController
             'template' => 'template1',
         ]);
     }
+    
 }

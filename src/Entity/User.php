@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "user_type", type: "string")]
 #[ORM\DiscriminatorMap(["admin" => Admin::class, "doctor" => Doctor::class, "patient" => Patient::class])]
- class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,8 +36,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     protected ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le prénom est obligatoire.")]
+    #[Assert\NotBlank(message: "Le prÃ©nom est obligatoire.")]
     protected ?string $prenom = null;
+
+    // New field for password reset token
+    #[ORM\Column(length: 255, nullable: true)]
+    protected ?string $passwordResetToken = null;
 
     public function __construct()
     {
@@ -126,5 +130,16 @@ use Symfony\Component\Validator\Constraints as Assert;
     public function eraseCredentials(): void
     {
     }
-    
+
+    // New methods for the password reset token
+    public function getPasswordResetToken(): ?string
+    {
+        return $this->passwordResetToken;
+    }
+
+    public function setPasswordResetToken(?string $passwordResetToken): self
+    {
+        $this->passwordResetToken = $passwordResetToken;
+        return $this;
+    }
 }

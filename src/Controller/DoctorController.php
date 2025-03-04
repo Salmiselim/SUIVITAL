@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/doctor')]
 final class DoctorController extends AbstractController
@@ -99,23 +100,27 @@ final class DoctorController extends AbstractController
         return $this->redirectToRoute('app_doctor_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/home/{id<\d+>}', name: 'app_doctor_home', methods: ['GET'])]
-    public function home(DoctorRepository $doctorRepository, int $id, RequestStack $requestStack): Response
+    #[Route('/home', name: 'app_doctor_home', methods: ['GET'])]
+    #[IsGranted('ROLE_DOCTOR')]
+    public function home(DoctorRepository $doctorRepository, RequestStack $requestStack): Response
     {
-        $doctor = $doctorRepository->find($id);
-
-        if (!$doctor) {
-            throw $this->createNotFoundException('Doctor not found');
+        $user = $this->getUser();
+    
+        if (!$user instanceof Doctor) {
+            throw $this->createAccessDeniedException('Access denied. Only doctors can access this page.');
         }
-
+    
         $session = $requestStack->getSession();
-        $session->set('doctorId', $id);
-
+        $session->set('doctorId', $user->getId());
+    
         return $this->render('doctor/home.html.twig', [
-            'doctor_name' => $doctor->getNom(),
+            'doctor_name' => $user->getNom(),
             'template' => 'template1',
+            'isVerified' => $user->isVerified(), 
+
         ]);
     }
+    
 
     #[Route('/users', name: 'app_doctor_dashboard')]
     public function userlist(): Response

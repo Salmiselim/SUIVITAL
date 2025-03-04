@@ -3,6 +3,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 class Doctor extends User
@@ -14,7 +16,8 @@ class Doctor extends User
         mimeTypesMessage: 'Veuillez télécharger un fichier PDF, JPEG ou PNG valide.'
     )]
     private ?string $proof = null;
-
+    #[ORM\OneToMany(mappedBy: 'doctor', targetEntity: Ordonnance::class, cascade: ['persist', 'remove'])]
+    private Collection $ordonnances;
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
@@ -23,6 +26,7 @@ class Doctor extends User
         parent::__construct();
         $this->roles = ['ROLE_DOCTOR'];
         $this->isVerified = false;
+        $this->ordonnances = new ArrayCollection();
     }
 
     public function getProof(): ?string
@@ -44,6 +48,29 @@ class Doctor extends User
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+        return $this;
+    }
+    public function getOrdonnances(): Collection
+    {
+        return $this->ordonnances;
+    }
+
+    public function addOrdonnance(Ordonnance $ordonnance): self
+    {
+        if (!$this->ordonnances->contains($ordonnance)) {
+            $this->ordonnances[] = $ordonnance;
+            $ordonnance->setDoctor($this);
+        }
+        return $this;
+    }
+
+    public function removeOrdonnance(Ordonnance $ordonnance): self
+    {
+        if ($this->ordonnances->removeElement($ordonnance)) {
+            if ($ordonnance->getDoctor() === $this) {
+                $ordonnance->setDoctor(null);
+            }
+        }
         return $this;
     }
 }

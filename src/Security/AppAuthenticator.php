@@ -52,7 +52,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
         return match (true) {
             in_array('ROLE_PATIENT', $user->getRoles(), true) => new RedirectResponse($this->urlGenerator->generate('app_patient_dashboard')),
             in_array('ROLE_DOCTOR', $user->getRoles(), true) => new RedirectResponse($this->urlGenerator->generate('app_doctor_dashboard')),
-            in_array('ROLE_ADMIN', $user->getRoles(), true) => new RedirectResponse($this->urlGenerator->generate('app_admin_dashboard')),
+            in_array('ROLE_ADMIN', $user->getRoles(), true) => new RedirectResponse($this->urlGenerator->generate('/dashboard')),
             default => new RedirectResponse($this->urlGenerator->generate('app_home')),
         };
     }

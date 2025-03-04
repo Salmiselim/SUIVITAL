@@ -23,6 +23,7 @@ final class ReclamationsController extends AbstractController
     {
         return $this->render('reclamations/index.html.twig', [
             'reclamations' => $reclamationRepository->findAll(),
+            'template' => 'template1',
         ]);
     }
 
@@ -32,6 +33,7 @@ final class ReclamationsController extends AbstractController
     {
         return $this->render('admin/R_index.html.twig', [
             'reclamations' => $reclamationRepository->findAll(),
+            'template' => 'template2',
         ]);
     }
 
@@ -58,6 +60,7 @@ final class ReclamationsController extends AbstractController
         return $this->render('reclamations/new.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
+            'template' => 'template1',
         ]);
     }
 
@@ -84,11 +87,12 @@ final class ReclamationsController extends AbstractController
         return $this->render('admin/R_new.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
+            'template' => 'template2',
         ]);
     }
 
     // Search Reclamations
-    #[Route('/search', name: 'app_reclamations_search', methods: ['GET'])]
+   #[Route('/search', name: 'app_reclamations_search', methods: ['GET'])]
 #[Route('/admin/search', name: 'app_admin_reclamations_search', methods: ['GET'])]
 public function search(ReclamationRepository $reclamationRepository, PaginatorInterface $paginator, Request $request): Response
 {
@@ -107,14 +111,16 @@ public function search(ReclamationRepository $reclamationRepository, PaginatorIn
         10
     );
 
-    // Determine if the request is from the admin panel
-    $isAdminRoute = str_contains($request->getPathInfo(), '/admin');
+    // Check if the user is an admin
+    $isAdmin = $this->isGranted('ROLE_ADMIN');
 
-    return $this->render($isAdminRoute ? 'admin/R_index.html.twig' : 'reclamations/index.html.twig', [
+    return $this->render($isAdmin ? 'admin/R_index.html.twig' : 'reclamations/index.html.twig', [
         'reclamations' => $pagination,
         'searchTerm' => $searchTerm,
+        'template' => 'template1',
     ]);
 }
+
 
     // User Show Reclamation
     #[Route('/{id}', name: 'app_reclamations_show', methods: ['GET'])]
@@ -122,6 +128,7 @@ public function search(ReclamationRepository $reclamationRepository, PaginatorIn
     {
         return $this->render('reclamations/show.html.twig', [
             'reclamation' => $reclamation,
+            'template' => 'template1',
         ]);
     }
 
@@ -131,6 +138,7 @@ public function search(ReclamationRepository $reclamationRepository, PaginatorIn
     {
         return $this->render('admin/R_show.html.twig', [
             'reclamation' => $reclamation,
+            'template' => 'template2',
         ]);
     }
 
@@ -150,6 +158,7 @@ public function search(ReclamationRepository $reclamationRepository, PaginatorIn
         return $this->render('reclamations/edit.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
+            'template' => 'template1',
         ]);
     }
 
@@ -169,6 +178,7 @@ public function search(ReclamationRepository $reclamationRepository, PaginatorIn
         return $this->render('admin/R_edit.html.twig', [
             'reclamation' => $reclamation,
             'form' => $form,
+            'template' => 'template2',
         ]);
     }
 

@@ -16,7 +16,7 @@ class EmailService
 
     public function sendNewReclamationNotification()
     {
-        try {
+       /* try {*/
             // Create the email
             $email = (new Email())
                 ->from('mservTal@outlook.com')
@@ -24,16 +24,16 @@ class EmailService
                 ->subject('Vous avez reçu une nouvelle réclamation !')
                 ->text('Une nouvelle réclamation a été soumise dans le système. Veuillez consulter le tableau de bord des réclamations.');
     
-            // Send the email
+           // Send the email
             $this->mailer->send($email);
     
-            // Debugging confirmation
+            /*  Debugging confirmation
             die('✅ Email sent successfully!');
     
         } catch (\Exception $e) {
             die('❌ Email sending failed: ' . $e->getMessage());
-        }
-    }
+        } 
+    }  */
     
-
+    }
 }

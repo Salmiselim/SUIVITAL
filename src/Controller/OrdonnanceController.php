@@ -10,56 +10,57 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 #[Route('/ordonnance')]
 final class OrdonnanceController extends AbstractController
 {
     #[Route(name: 'app_ordonnance_index', methods: ['GET'])]
-public function index(
-    OrdonnanceRepository $ordonnanceRepository, 
-    PaginatorInterface $paginator, 
-    Request $request
-): Response {
+    public function index(
+        OrdonnanceRepository $ordonnanceRepository, 
+        PaginatorInterface $paginator, 
+        Request $request
+    ): Response {
+        
+        $queryBuilder = $ordonnanceRepository->createQueryBuilder('o')
+            ->leftJoin('o.patient', 'p')
+            ->leftJoin('o.doctor', 'd')
+            ->addSelect('p', 'd');
     
-    $queryBuilder = $ordonnanceRepository->createQueryBuilder('o')
-        ->leftJoin('o.patient', 'p')
-        ->leftJoin('o.doctor', 'd')
-        ->addSelect('p', 'd');
-
-    // Apply filters
-    $patientName = $request->query->get('patient_name');
-    $doctorName = $request->query->get('doctor_name');
-    $datePrescription = $request->query->get('date_prescription');
-
-    if ($patientName) {
-        $queryBuilder->andWhere('p.nom LIKE :patient')
-            ->setParameter('patient', '%' . $patientName . '%');
-    }
-
-    if ($doctorName) {
-        $queryBuilder->andWhere('d.nom LIKE :doctor')
-            ->setParameter('doctor', '%' . $doctorName . '%');
-    }
-
-    if ($datePrescription) {
-        $queryBuilder->andWhere('o.datePrescription LIKE :date')
-            ->setParameter('date', $datePrescription . '%');
-    }
-
-    $query = $queryBuilder->getQuery();
-    $ordonnances = $paginator->paginate($query, $request->query->getInt('page', 1), 5);
+        // Apply filters
+        $patientName = $request->query->get('patient_name');
+        $doctorName = $request->query->get('doctor_name');
+        $datePrescription = $request->query->get('date_prescription');
+    
+        if ($patientName) {
+            $queryBuilder->andWhere('p.nom LIKE :patient')
+                ->setParameter('patient', '%' . $patientName . '%');
+        }
+    
+        if ($doctorName) {
+            $queryBuilder->andWhere('d.nom LIKE :doctor')
+                ->setParameter('doctor', '%' . $doctorName . '%');
+        }
+    
+        if ($datePrescription) {
+            $queryBuilder->andWhere('o.datePrescription LIKE :date')
+                ->setParameter('date', $datePrescription . '%');
+        }
+    
+        $query = $queryBuilder->getQuery();
+        $ordonnances = $paginator->paginate($query, $request->query->getInt('page', 1), 5);
+ 
+    
+        return $this->render('ordonnance/index.html.twig', [
+            'ordonnances' => $ordonnances,
+            'template' => 'template2',
+        ]);
+    }   
     
 
-    return $this->render('ordonnance/index.html.twig', [
-        'ordonnances' => $ordonnances,
-        'template' => 'template2',
-    ]);
-}   
-
-
-
+    
     #[Route('/search/patient', name: 'search_patient', methods: ['GET'])]
     public function searchPatient(Request $request, OrdonnanceRepository $ordonnanceRepository): Response
     {

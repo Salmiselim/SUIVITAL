@@ -10,72 +10,59 @@
             <a href="{{ path('app_post_new') }}" class="btn btn-success" style="padding: 10px 20px; font-size: 16px;">Add New Post</a>
         </div>
 
+        {# Formulaire de recherche #}
+        <div style="text-align: center; margin-bottom: 20px;">
+            <form action="{{ path('post_search') }}" method="get" style="display: inline-block;">
+                <input type="text" name="q" placeholder="Rechercher un post..." value="{{ app.request.query.get('q') }}" style="padding: 8px; font-size: 14px; border: 1px solid #ddd; border-radius: 5px;">
+                <button type="submit" style="padding: 8px 16px; font-size: 14px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Rechercher</button>
+            </form>
+        </div>
+
         {# Liste des posts #}
         <div style="max-width: 900px; margin: 0 auto; position: relative;">
-            {% for post in posts %}
-                {# Carte pour chaque post #}
-                <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 10px; background-color: #fff;">
-                    {# Auteur et date du post #}
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <strong style="font-size: 1.2em; color: #555;">{{ post.author }}</strong>
-                        <small style="color: #888;">{{ post.getCreatedAt()|date('Y-m-d') }}</small>
-                    </div>
-
-                    {# Titre et contenu du post #}
-                    <h2 style="font-size: 1.5em; color: #333; margin-bottom: 10px;">{{ post.title }}</h2>
-                    <p style="font-size: 1em; color: #444; line-height: 1.6;">{{ post.content }}</p>
-
-                    {# Boutons d'action pour le post #}
-                    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-                        <div>
-                            <a href="{{ path('app_post_edit', {'id': post.id}) }}" style="color: #007bff; text-decoration: none;">Edit</a> | 
-                            <a href="{{ path('app_post_delete', {'id': post.id}) }}" style="color: #dc3545; text-decoration: none;" onclick="return confirm('Are you sure?');">Delete</a>
+            {% if posts is empty %}
+                <p style="text-align: center; color: #888;">
+                    {% if app.request.query.get('q') %}
+                        Aucun résultat trouvé pour "{{ app.request.query.get('q') }}".
+                    {% else %}
+                        No posts found.
+                    {% endif %}
+                </p>
+            {% else %}
+                {% for post in posts %}
+                    {# Carte pour chaque post #}
+                    <div style="border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 10px; background-color: #fff;">
+                        {# Auteur et date du post #}
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="font-size: 1.2em; color: #555;">{{ post.author }}</strong>
+                            <small style="color: #888;">{{ post.getCreatedAt()|date('Y-m-d') }}</small>
                         </div>
-                        <div>
-                            <a href="{{ path('app_comment_new', {'postId': post.id}) }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Comment</a>
+
+                        {# Titre et contenu du post #}
+                        <h2 style="font-size: 1.5em; color: #333; margin-bottom: 10px;">{{ post.title }}</h2>
+                        <p style="font-size: 1em; color: #444; line-height: 1.6;">{{ post.content }}</p>
+
+                        {# Boutons d'action pour le post #}
+                        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                            <div>
+                                <a href="{{ path('app_post_edit', {'id': post.id}) }}" style="color: #007bff; text-decoration: none;">Edit</a> | 
+                                <a href="{{ path('app_post_delete', {'id': post.id}) }}" style="color: #dc3545; text-decoration: none;" onclick="return confirm('Are you sure?');">Delete</a>
+                            </div>
+                            <div>
+                                <a href="{{ path('app_comment_new', {'postId': post.id}) }}" class="btn btn-primary" style="padding: 8px 16px; font-size: 14px;">Comment</a>
+                            </div>
                         </div>
-                    </div>
 
-                    {# Section des commentaires #}
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                        <h3 style="font-size: 1.3em; color: #555; margin-bottom: 15px;">Comments</h3>
+                        {# Section des commentaires #}
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                            <h3 style="font-size: 1.3em; color: #555; margin-bottom: 15px;">Comments</h3>
 
-                        {% if commentsByPost[post.id] is empty %}
-                            <p style="color: #888; font-style: italic;">No Comments Yet.</p>
-                        {% else %}
-                            <ul style="list-style-type: none; padding: 0;">
-                                {# Afficher seulement les deux premiers commentaires #}
-                                {% for comment in commentsByPost[post.id]|slice(0, 2) %}
-                                    <li style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border: 1px solid #eee;">
-                                        {# Nom de l'auteur, boutons "Edit" et "Delete", et date #}
-                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                                            <div>
-                                                <strong style="font-size: 1em; color: #333;">{{ comment.author }}</strong>
-                                            </div>
-                                            <div style="display: flex; align-items: center; gap: 10px;">
-                                                {# Boutons "Edit" et "Delete" #}
-                                                <a href="{{ path('app_comment_edit', {'id': comment.id}) }}" style="color: #666; text-decoration: none;">Edit</a>
-                                                <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" style="color: #666; text-decoration: none;" onclick="return confirm('Are you sure?');">Delete</a>
-                                                {# Date du commentaire #}
-                                                <small style="color: #888;">{{ comment.createdAt|date('Y-m-d') }}</small>
-                                            </div>
-                                        </div>
-
-                                        {# Contenu du commentaire #}
-                                        <p style="font-size: 0.9em; color: #444; margin: 0;">{{ comment.content }}</p>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-
-                            {# Afficher le bouton "See more..." s'il y a plus de 2 commentaires #}
-                            {% if commentsByPost[post.id]|length > 2 %}
-                                <button onclick="toggleComments({{ post.id }})" style="background: none; border: none; color: #007bff; cursor: pointer; padding: 0; font-size: 0.9em;">
-                                    See more...
-                                </button>
-
-                                {# Masquer les commentaires supplémentaires par défaut #}
-                                <ul id="comments-{{ post.id }}" style="list-style-type: none; padding: 0; display: none;">
-                                    {% for comment in commentsByPost[post.id]|slice(2) %}
+                            {% if commentsByPost[post.id] is empty %}
+                                <p style="color: #888; font-style: italic;">No Comments Yet.</p>
+                            {% else %}
+                                <ul style="list-style-type: none; padding: 0;">
+                                    {# Afficher seulement les deux premiers commentaires #}
+                                    {% for comment in commentsByPost[post.id]|slice(0, 2) %}
                                         <li style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border: 1px solid #eee;">
                                             {# Nom de l'auteur, boutons "Edit" et "Delete", et date #}
                                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
@@ -96,13 +83,66 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
+
+                                {# Afficher le bouton "See more..." s'il y a plus de 2 commentaires #}
+                                {% if commentsByPost[post.id]|length > 2 %}
+                                    <button onclick="toggleComments({{ post.id }})" style="background: none; border: none; color: #007bff; cursor: pointer; padding: 0; font-size: 0.9em;">
+                                        See more...
+                                    </button>
+
+                                    {# Masquer les commentaires supplémentaires par défaut #}
+                                    <ul id="comments-{{ post.id }}" style="list-style-type: none; padding: 0; display: none;">
+                                        {% for comment in commentsByPost[post.id]|slice(2) %}
+                                            <li style="margin-bottom: 15px; padding: 10px; background-color: #f9f9f9; border-radius: 5px; border: 1px solid #eee;">
+                                                {# Nom de l'auteur, boutons "Edit" et "Delete", et date #}
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                                    <div>
+                                                        <strong style="font-size: 1em; color: #333;">{{ comment.author }}</strong>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                                        {# Boutons "Edit" et "Delete" #}
+                                                        <a href="{{ path('app_comment_edit', {'id': comment.id}) }}" style="color: #666; text-decoration: none;">Edit</a>
+                                                        <a href="{{ path('app_comment_delete', {'id': comment.id}) }}" style="color: #666; text-decoration: none;" onclick="return confirm('Are you sure?');">Delete</a>
+                                                        {# Date du commentaire #}
+                                                        <small style="color: #888;">{{ comment.createdAt|date('Y-m-d') }}</small>
+                                                    </div>
+                                                </div>
+
+                                                {# Contenu du commentaire #}
+                                                <p style="font-size: 0.9em; color: #444; margin: 0;">{{ comment.content }}</p>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
+                        </div>
                     </div>
+                {% endfor %}
+
+                {# Pagination #}
+                <div style="text-align: center; margin-top: 20px;">
+                    {% if currentPage > 1 %}
+                        <a href="{{ path('app_post_index', { 'page': currentPage - 1 }) }}" style="padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px;">Précédent</a>
+                    {% endif %}
+
+                    {% for page in 1..totalPages %}
+                        <a href="{{ path('app_post_index', { 'page': page }) }}" 
+                           style="padding: 10px 20px; margin: 0 5px; 
+                                  {% if page == currentPage %} 
+                                      background-color: #007bff; color: white; 
+                                  {% else %}
+                                      background-color: #f0f0f0; color: #007bff; 
+                                  {% endif %}
+                                  border-radius: 5px;">
+                            {{ page }}
+                        </a>
+                    {% endfor %}
+
+                    {% if currentPage < totalPages %}
+                        <a href="{{ path('app_post_index', { 'page': currentPage + 1 }) }}" style="padding: 10px 20px; background-color: #007bff; color: white; border-radius: 5px;">Suivant</a>
+                    {% endif %}
                 </div>
-            {% else %}
-                <p style="text-align: center; color: #888;">No posts found.</p>
-            {% endfor %}
+            {% endif %}
         </div>
 
         {# Bouton de retour en haut de page #}

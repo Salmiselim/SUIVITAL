@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserRepository;
@@ -16,6 +17,7 @@ use App\Entity\User;
 final class AdminController extends AbstractController
 {
     #[Route('/dashboard', name: 'admin_dashboard')]
+    #[IsGranted('ROLE_ADMIN')]
     public function dashboard(
         UserRepository $userRepo,
         OrdonnanceRepository $ord,

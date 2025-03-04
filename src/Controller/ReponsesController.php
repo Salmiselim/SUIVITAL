@@ -21,6 +21,7 @@ final class ReponsesController extends AbstractController
     {
         return $this->render('reponses/index.html.twig', [
             'reponses' => $reponseRepository->findAll(),
+            'template' => 'template1',
         ]);
     }
 
@@ -30,6 +31,7 @@ final class ReponsesController extends AbstractController
     {
         return $this->render('admin/index.html.twig', [
             'reponses' => $reponseRepository->findAll(),
+            'template' => 'template2',
         ]);
     }
 
@@ -51,6 +53,7 @@ final class ReponsesController extends AbstractController
         return $this->render('reponses/new.html.twig', [
             'reponse' => $reponse,
             'form' => $form,
+            'template' => 'template1',
         ]);
     }
 
@@ -72,6 +75,8 @@ final class ReponsesController extends AbstractController
         return $this->render('admin/new.html.twig', [
             'reponse' => $reponse,
             'form' => $form,
+            'template' => 'template2',
+
         ]);
     }
 
@@ -106,6 +111,8 @@ public function search(ReponseRepository $reponseRepository, PaginatorInterface 
         'reponses' => $pagination,
         'searchTerm' => $searchTerm,
         'noResults' => $noResults,  // Passing the noResults flag to the template
+        'template' => 'template2',
+
     ]);
 }
 
@@ -118,6 +125,8 @@ public function search(ReponseRepository $reponseRepository, PaginatorInterface 
     {
         return $this->render('reponses/show.html.twig', [
             'reponse' => $reponse,
+            'template' => 'template1',
+
         ]);
     }
 
@@ -127,6 +136,8 @@ public function search(ReponseRepository $reponseRepository, PaginatorInterface 
     {
         return $this->render('admin/show.html.twig', [
             'reponse' => $reponse,
+            'template' => 'template2',
+
         ]);
     }
 
@@ -146,6 +157,8 @@ public function search(ReponseRepository $reponseRepository, PaginatorInterface 
         return $this->render('reponses/edit.html.twig', [
             'reponse' => $reponse,
             'form' => $form,
+            'template' => 'template1',
+
         ]);
     }
 
@@ -165,6 +178,8 @@ public function search(ReponseRepository $reponseRepository, PaginatorInterface 
         return $this->render('admin/edit.html.twig', [
             'reponse' => $reponse,
             'form' => $form,
+            'template' => 'template2',
+
         ]);
     }
 

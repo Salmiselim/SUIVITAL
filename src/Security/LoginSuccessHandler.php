@@ -26,7 +26,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $session = $this->requestStack->getSession();
 
         if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_admin_dashboard'));
+            return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
         }
 
         if (in_array('ROLE_DOCTOR', $user->getRoles(), true)) {

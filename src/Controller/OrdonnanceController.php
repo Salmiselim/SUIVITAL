@@ -33,6 +33,7 @@ final class OrdonnanceController extends AbstractController
         $patientName = $request->query->get('patient_name');
         $doctorName = $request->query->get('doctor_name');
         $datePrescription = $request->query->get('date_prescription');
+        $order = $request->query->get('order', 'desc'); // Default sorting is DESC
     
         if ($patientName) {
             $queryBuilder->andWhere('p.nom LIKE :patient')
@@ -49,17 +50,22 @@ final class OrdonnanceController extends AbstractController
                 ->setParameter('date', $datePrescription . '%');
         }
     
+        // Apply sorting
+        if ($order === 'asc') {
+            $queryBuilder->orderBy('o.datePrescription', 'ASC');
+        } else {
+            $queryBuilder->orderBy('o.datePrescription', 'DESC');
+        }
+    
         $query = $queryBuilder->getQuery();
         $ordonnances = $paginator->paginate($query, $request->query->getInt('page', 1), 5);
- 
     
         return $this->render('ordonnance/index.html.twig', [
             'ordonnances' => $ordonnances,
             'template' => 'template2',
+            'order' => $order, // Pass the order to the template
         ]);
-    }   
-    
-
+    }
     
     #[Route('/search/patient', name: 'search_patient', methods: ['GET'])]
     public function searchPatient(Request $request, OrdonnanceRepository $ordonnanceRepository): Response
@@ -110,7 +116,17 @@ final class OrdonnanceController extends AbstractController
 
         $form = $this->createForm(OrdonnanceType::class, $ordonnance);
         $form->handleRequest($request);
+        $order = $request->query->get('order', 'desc'); 
 
+        $queryBuilder = $entityManager->createQueryBuilder()
+            ->select('o')
+            ->from(Ordonnance::class, 'o');
+
+        if ($order === 'asc') {
+            $queryBuilder->orderBy('o.datePrescription', 'ASC');
+        } else {
+            $queryBuilder->orderBy('o.datePrescription', 'DESC');
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($ordonnance);
             $entityManager->flush();
@@ -121,6 +137,8 @@ final class OrdonnanceController extends AbstractController
 
             return $this->redirectToRoute('app_ordonnance_index');
         }
+ 
+
 
         return $this->render('ordonnance/new.html.twig', [
             'ordonnance' => $ordonnance,

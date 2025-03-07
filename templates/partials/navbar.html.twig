@@ -9,6 +9,8 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    
+
     <div class="collapse navbar-collapse" id="navigation">
       <ul class="navbar-nav navbar-nav-hover ms-auto">
         <div class="row">
@@ -51,9 +53,7 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">Contact</a>
         </li>
-        <li>
-             <a href="{{ path('app_logout') }}" class="btn btn-worning">Logout</a>
-             </li>
+         <a href="{{ path('app_logout') }}" class="btn btn-danger">Logout</a>
     </ul>
 
     <ul class="navbar-nav ml-auto">
@@ -92,8 +92,9 @@
                     <i class="fas fa-cog mr-2"></i> Settings
                 </a>
                 <div class="dropdown-divider"></div>
-                        <a href="{{ path('app_logout') }}" class="btn btn-success">Logout</a>
-
+                <a href="{{ path('app_logout') }}" class="dropdown-item text-success">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
             </div>
         </li>
     </ul>
